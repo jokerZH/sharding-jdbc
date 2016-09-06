@@ -14,24 +14,16 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 策略配置.
- * 
- * @author gaohongtao
- */
+/* 策略配置 */
 @Getter
 @Setter
 public class StrategyConfig {
-    
-    private String shardingColumns;
-    
-    private String algorithmClassName;
-    
-    private String algorithmExpression;
+    private String shardingColumns;     // 分表字段
+    private String algorithmClassName;  // 算法类名
+    private String algorithmExpression; // TODO 算法表达式
 }

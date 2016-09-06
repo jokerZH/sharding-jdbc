@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.api.rule;
 
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
@@ -32,37 +31,24 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * 分库分表规则配置对象.
- * 
- * @author zhangliang
- */
+/* 分库分表规则配置对象 */
 @Getter
 public final class ShardingRule {
+    private final DataSourceRule dataSourceRule;                        // db资源
+    private final Collection<TableRule> tableRules;                     // 逻辑表信息
+    private final Collection<BindingTableRule> bindingTableRules;       // 多个逻辑表相关关联的情况
+    private final DatabaseShardingStrategy databaseShardingStrategy;    // 分库算法
+    private final TableShardingStrategy tableShardingStrategy;          // TODO
     
-    private final DataSourceRule dataSourceRule;
-    
-    private final Collection<TableRule> tableRules;
-    
-    private final Collection<BindingTableRule> bindingTableRules;
-    
-    private final DatabaseShardingStrategy databaseShardingStrategy;
-    
-    private final TableShardingStrategy tableShardingStrategy;
-    
-    /**
-     * 全属性构造器.
-     * 
-     * <p>用于Spring非命名空间的配置.</p>
-     * 
-     * <p>未来将改为private权限, 不在对外公开, 不建议使用非Spring命名空间的配置.</p>
-     * 
-     * @deprecated 未来将改为private权限, 不在对外公开, 不建议使用非Spring命名空间的配置.
-     */
+    /* 全属性构造器 */
     @Deprecated
     public ShardingRule(
-            final DataSourceRule dataSourceRule, final Collection<TableRule> tableRules, final Collection<BindingTableRule> bindingTableRules, 
-            final DatabaseShardingStrategy databaseShardingStrategy, final TableShardingStrategy tableShardingStrategy) {
+            final DataSourceRule dataSourceRule,                        // dataSourcs
+            final Collection<TableRule> tableRules,                     // 逻辑表集合
+            final Collection<BindingTableRule> bindingTableRules,       // 多逻辑表联合
+            final DatabaseShardingStrategy databaseShardingStrategy,    // 分库算法
+            final TableShardingStrategy tableShardingStrategy           // 分表算法
+    ) {
         Preconditions.checkNotNull(dataSourceRule);
         Preconditions.checkNotNull(tableRules);
         this.dataSourceRule = dataSourceRule;

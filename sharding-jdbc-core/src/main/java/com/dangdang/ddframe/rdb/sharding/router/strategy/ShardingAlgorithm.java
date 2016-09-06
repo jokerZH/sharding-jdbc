@@ -14,13 +14,8 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.router.strategy;
 
-/**
- * 分片算法的标识接口.
- * 
- * @author zhangliang
- */
+/* 分片算法的标识接口 */
 public interface ShardingAlgorithm {
 }

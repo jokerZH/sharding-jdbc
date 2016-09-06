@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 
 import java.util.ArrayList;
@@ -26,24 +25,25 @@ import javax.sql.DataSource;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 分片规则配置.
- * 
- * @author gaohongtao
- */
+/* 分片规则配置 */
 @Getter
 @Setter
 public class ShardingRuleConfig {
-    
-    private Map<String, DataSource> dataSource = new HashMap<>();
-    
+    /* mysql数据源 */
+    private Map<String/*datasourceName*/, DataSource> dataSource = new HashMap<>();
+
+    /* 默认db的名字 */
     private String defaultDataSourceName;
-    
-    private Map<String, TableRuleConfig> tables = new HashMap<>();
-    
+
+    /* 逻辑表到规则的映射 */
+    private Map<String/*logicTableName*/, TableRuleConfig> tables = new HashMap<>();
+
+    /* TODO */
     private List<BindingTableRuleConfig> bindingTables = new ArrayList<>();
-    
+
+    /* 默认的分库算法 */
     private StrategyConfig defaultDatabaseStrategy;
-    
+
+    /* 默认的分表算法 */
     private StrategyConfig defaultTableStrategy;
 }

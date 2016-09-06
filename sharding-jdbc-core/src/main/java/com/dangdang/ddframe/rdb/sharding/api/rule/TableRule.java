@@ -30,37 +30,27 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-/**
- * 表规则配置对象.
- * 
- * @author zhangliang
- */
+/* 表规则配置对象 */
 @Getter
 @ToString
 public final class TableRule {
+    private final String logicTable;        // 逻辑表名
+    private final boolean dynamic;          // 物理db和物理表计算的得到
+    private final List<DataNode> actualTables;  // 物理表
+    private final DatabaseShardingStrategy databaseShardingStrategy;    // db算法
+    private final TableShardingStrategy tableShardingStrategy;          // 物理表算法
     
-    private final String logicTable;
-    
-    private final boolean dynamic;
-    
-    private final List<DataNode> actualTables;
-    
-    private final DatabaseShardingStrategy databaseShardingStrategy;
-    
-    private final TableShardingStrategy tableShardingStrategy;
-    
-    /**
-     * 全属性构造器.
-     *
-     * <p>用于Spring非命名空间的配置.</p>
-     *
-     * <p>未来将改为private权限, 不在对外公开, 不建议使用非Spring命名空间的配置.</p>
-     *
-     * @deprecated 未来将改为private权限, 不在对外公开, 不建议使用非Spring命名空间的配置.
-     */
+    /* 全属性构造器 */
     @Deprecated
-    public TableRule(final String logicTable, final boolean dynamic, final List<String> actualTables, final DataSourceRule dataSourceRule, final Collection<String> dataSourceNames,
-                     final DatabaseShardingStrategy databaseShardingStrategy, final TableShardingStrategy tableShardingStrategy) {
+    public TableRule(
+            final String logicTable,            // 逻辑表名
+            final boolean dynamic,              // TODO
+            final List<String> actualTables,    // 每个db中的物理表名列表,且各个db的物理表名是相同的
+            final DataSourceRule dataSourceRule,        // datasource集合
+            final Collection<String> dataSourceNames,   // 当前逻辑表用到的datasourceName
+            final DatabaseShardingStrategy databaseShardingStrategy,    // 策略
+            final TableShardingStrategy tableShardingStrategy           // 策略
+    ) {
         Preconditions.checkNotNull(logicTable);
         this.logicTable = logicTable;
         this.dynamic = dynamic;
@@ -86,7 +76,8 @@ public final class TableRule {
     public static TableRuleBuilder builder(final String logicTable) {
         return new TableRuleBuilder(logicTable);
     }
-    
+
+    /* 将dataSourceRule中的dbName和默认的动态物理表名构建actualTables */
     private List<DataNode> generateDataNodes(final DataSourceRule dataSourceRule) {
         Collection<String> dataSourceNames = dataSourceRule.getDataSourceNames();
         List<DataNode> result = new ArrayList<>(dataSourceNames.size());
@@ -95,7 +86,8 @@ public final class TableRule {
         }
         return result;
     }
-    
+
+    /* 获得actualTables  */
     private List<DataNode> generateDataNodes(final List<String> actualTables, final DataSourceRule dataSourceRule, final Collection<String> actualDataSourceNames) {
         Collection<String> dataSourceNames = getDataSourceNames(dataSourceRule, actualDataSourceNames);
         List<DataNode> result = new ArrayList<>(actualTables.size() * (dataSourceNames.isEmpty() ? 1 : dataSourceNames.size()));
@@ -110,7 +102,8 @@ public final class TableRule {
         }
         return result;
     }
-    
+
+    /* 处理参数为null或者空的情况 */
     private Collection<String> getDataSourceNames(final DataSourceRule dataSourceRule, final Collection<String> actualDataSourceNames) {
         if (null == dataSourceRule) {
             return Collections.emptyList();
@@ -121,17 +114,12 @@ public final class TableRule {
         return actualDataSourceNames;
     }
     
-    /**
-     * 根据数据源名称过滤获取真实数据单元.
-     *
-     * @param targetDataSources 数据源名称集合
-     * @param targetTables 真实表名称集合
-     * @return 真实数据单元
-     */
+    /* 根据数据源名称过滤获取真实数据单元 */
     public Collection<DataNode> getActualDataNodes(final Collection<String> targetDataSources, final Collection<String> targetTables) {
         return dynamic ? getDynamicDataNodes(targetDataSources, targetTables) : getStaticDataNodes(targetDataSources, targetTables);
     }
-    
+
+    /* 根据参数返回结果信息 */
     private Collection<DataNode> getDynamicDataNodes(final Collection<String> targetDataSources, final Collection<String> targetTables) {
         Collection<DataNode> result = new LinkedHashSet<>(targetDataSources.size() * targetTables.size());
         for (String targetDataSource : targetDataSources) {
@@ -141,7 +129,8 @@ public final class TableRule {
         }
         return result;
     }
-    
+
+    /* 返回actualTables在参数中存在的数据 */
     private Collection<DataNode> getStaticDataNodes(final Collection<String> targetDataSources, final Collection<String> targetTables) {
         Collection<DataNode> result = new LinkedHashSet<>(actualTables.size());
         for (DataNode each : actualTables) {
@@ -153,11 +142,7 @@ public final class TableRule {
     }
     
     
-    /**
-     * 获取真实数据源.
-     *
-     * @return 真实表名称
-     */
+    /* 获取真实数据源 */
     public Collection<String> getActualDatasourceNames() {
         Collection<String> result = new LinkedHashSet<>(actualTables.size());
         for (DataNode each : actualTables) {
@@ -166,12 +151,7 @@ public final class TableRule {
         return result;
     }
     
-    /**
-     * 根据数据源名称过滤获取真实表名称.
-     *
-     * @param targetDataSources 数据源名称
-     * @return 真实表名称
-     */
+    /* 根据数据源名称过滤获取真实表名称 */
     public Collection<String> getActualTableNames(final Collection<String> targetDataSources) {
         Collection<String> result = new LinkedHashSet<>(actualTables.size());
         for (DataNode each : actualTables) {
@@ -181,7 +161,8 @@ public final class TableRule {
         }
         return result;
     }
-    
+
+    /* 返回物理表的下标 */
     int findActualTableIndex(final String dataSourceName, final String actualTableName) {
         int result = 0;
         for (DataNode each : actualTables) {
@@ -193,9 +174,7 @@ public final class TableRule {
         return -1;
     }
     
-    /**
-     * 表规则配置对象构建器.
-     */
+    /* 表规则配置对象构建器 */
     @RequiredArgsConstructor
     public static class TableRuleBuilder {
         

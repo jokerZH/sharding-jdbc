@@ -21,19 +21,9 @@ import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 
 import java.util.Collection;
 
-/**
- * 多片键分片法接口.
- * 
- * @author zhangliang
- */
+/* 多片键分片法接口 */
 public interface MultipleKeysShardingAlgorithm extends ShardingAlgorithm {
     
-    /**
-     * 根据分片值计算分片结果名称集合.
-     * 
-     * @param availableTargetNames 所有的可用目标名称集合, 一般是数据源或表名称
-     * @param shardingValues 分片值集合
-     * @return 分片后指向的目标名称集合, 一般是数据源或表名称
-     */
+    /* 根据分片值计算分片结果名称集合 */
     Collection<String> doSharding(Collection<String> availableTargetNames, Collection<ShardingValue<?>> shardingValues);
 }

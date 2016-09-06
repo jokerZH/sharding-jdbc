@@ -14,20 +14,14 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 绑定表配置.
- * 
- * @author gaohongtao
- */
+/* 绑定表配置 */
 @Getter
 @Setter
 public class BindingTableRuleConfig {
-    
     private String tableNames;
 }

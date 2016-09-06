@@ -14,15 +14,9 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.router;
 
-/**
- * SQL语句类型.
- * 
- * @author gaohongtao
- */
+/* SQL语句类型 */
 public enum SQLStatementType {
-    
     INSERT, DELETE, UPDATE, SELECT
 }

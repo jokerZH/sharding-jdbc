@@ -14,46 +14,20 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.router.strategy;
 
 import java.util.Collection;
-
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 
-/**
- * 单片键分片法接口.
- * 
- * @author zhangliang
- * 
- * @param <T> 片键类型
- */
-public interface SingleKeyShardingAlgorithm<T extends Comparable<?>> extends ShardingAlgorithm {
+/* 单片键分片法接口 */
+public interface SingleKeyShardingAlgorithm<T/*片键类型*/ extends Comparable<?>> extends ShardingAlgorithm {
     
-    /**
-     * 根据分片值和SQL的=运算符计算分片结果名称集合.
-     * 
-     * @param availableTargetNames 所有的可用目标名称集合, 一般是数据源或表名称
-     * @param shardingValue 分片值
-     * @return 分片后指向的目标名称, 一般是数据源或表名称
-     */
+    /* 根据分片值和SQL的=运算符计算分片结果名称集合 */
     String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<T> shardingValue);
     
-    /**
-     * 根据分片值和SQL的IN运算符计算分片结果名称集合.
-     * 
-     * @param availableTargetNames 所有的可用目标名称集合, 一般是数据源或表名称
-     * @param shardingValue 分片值
-     * @return 分片后指向的目标名称集合, 一般是数据源或表名称
-     */
+    /* 根据分片值和SQL的IN运算符计算分片结果名称集合 */
     Collection<String> doInSharding(Collection<String> availableTargetNames, ShardingValue<T> shardingValue);
     
-    /**
-     * 根据分片值和SQL的BETWEEN运算符计算分片结果名称集合.
-     * 
-     * @param availableTargetNames 所有的可用目标名称集合, 一般是数据源或表名称
-     * @param shardingValue 分片值
-     * @return 分片后指向的目标名称集合, 一般是数据源或表名称
-     */
+    /* 根据分片值和SQL的BETWEEN运算符计算分片结果名称集合 */
     Collection<String> doBetweenSharding(Collection<String> availableTargetNames, ShardingValue<T> shardingValue);
 }

@@ -26,23 +26,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Binding表规则配置对象.
- * 
- * @author zhangliang
- */
+/* Binding表规则配置对象, 用于管理多个逻辑表,保证数据分布是相同的 */
 @RequiredArgsConstructor
 @Getter
 public final class BindingTableRule {
-    
     private final List<TableRule> tableRules;
     
-    /**
-     * 判断此绑定表规则是否包含该逻辑表.
-     * 
-     * @param logicTableName 逻辑表名称
-     * @return 此绑定表规则是否包含该逻辑表
-     */
+    /* 判断此绑定表规则是否包含该逻辑表 */
     public boolean hasLogicTable(final String logicTableName) {
         for (TableRule each : tableRules) {
             if (each.getLogicTable().equals(logicTableName)) {
@@ -52,14 +42,7 @@ public final class BindingTableRule {
         return false;
     }
     
-    /**
-     * 根据其他Binding表真实表名称获取相应的真实Binding表名称.
-     * 
-     * @param dataSource 数据源名称
-     * @param logicTable 逻辑表名称
-     * @param otherActualTable 其他真实Binding表名称
-     * @return 真实Binding表名称
-     */
+    /* 根绝一个表的物理表名找到另外一个表中和这个物理表名下表一样的表, 在inner join中会用到 */
     public String getBindingActualTable(final String dataSource, final String logicTable, final String otherActualTable) {
         int index = -1;
         for (TableRule each : tableRules) {

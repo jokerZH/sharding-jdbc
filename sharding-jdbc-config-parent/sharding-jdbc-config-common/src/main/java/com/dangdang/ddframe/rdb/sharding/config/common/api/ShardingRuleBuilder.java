@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.api;
 
 import com.dangdang.ddframe.rdb.sharding.api.rule.BindingTableRule;
@@ -53,33 +52,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/**
- * 分片规则构建器.
- * 
- * @author gaohongtao
- */
+/* 分片规则构建器 */
 @AllArgsConstructor
 public final class ShardingRuleBuilder {
+    private final String logRoot;                                   // 日志信息
+    private final Map<String/*dataSourceName*/, DataSource> externalDataSourceMap;  // db资源
+    private final ShardingRuleConfig shardingRuleConfig;            // 总的分表规则
+
+    public ShardingRuleBuilder(final ShardingRuleConfig shardingRuleConfig) { this("default", shardingRuleConfig); }
+    public ShardingRuleBuilder(final String logRoot, final ShardingRuleConfig shardingRuleConfig) { this(logRoot, Collections.<String, DataSource>emptyMap(), shardingRuleConfig); }
     
-    private final String logRoot;
-    
-    private final Map<String, DataSource> externalDataSourceMap;
-    
-    private final ShardingRuleConfig shardingRuleConfig;
-    
-    public ShardingRuleBuilder(final ShardingRuleConfig shardingRuleConfig) {
-        this("default", shardingRuleConfig);
-    }
-    
-    public ShardingRuleBuilder(final String logRoot, final ShardingRuleConfig shardingRuleConfig) {
-        this(logRoot, Collections.<String, DataSource>emptyMap(), shardingRuleConfig);
-    }
-    
-    /**
-     * 构建分片规则.
-     * 
-     * @return 分片规则对象
-     */
+    /* 构建分片规则 */
     public ShardingRule build() {
         DataSourceRule dataSourceRule = buildDataSourceRule();
         Collection<TableRule> tableRules = buildTableRules(dataSourceRule);

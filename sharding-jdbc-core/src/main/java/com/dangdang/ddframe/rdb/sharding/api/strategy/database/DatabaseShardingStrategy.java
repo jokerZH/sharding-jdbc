@@ -14,18 +14,13 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.api.strategy.database;
 
 import java.util.Collection;
 
 import com.dangdang.ddframe.rdb.sharding.router.strategy.ShardingStrategy;
 
-/**
- * 分库策略.
- * 
- * @author zhangliang
- */
+/* 分库策略 */
 public final class DatabaseShardingStrategy extends ShardingStrategy {
     
     public DatabaseShardingStrategy(final String shardingColumn, final SingleKeyDatabaseShardingAlgorithm<?> databaseShardingAlgorithm) {

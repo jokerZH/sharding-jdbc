@@ -29,47 +29,25 @@ import com.google.common.collect.Range;
 
 /**
  * 分片值.
- * 
- * <p>
  * 目前支持{@code =, IN, BETWEEN};
  * 不支持{@code , >, <=, >=, LIKE, NOT, NOT IN}.
- * </p>
- * 
- * @author zhangliang
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
 public final class ShardingValue<T extends Comparable<?>> {
+    private final String logicTableName;    // 逻辑表名
+    private final String columnName;        // 字段名
+    private final T value;                  // 单个值
+    private final Collection<T> values;     // 多个值
+    private final Range<T> valueRange;      // 范围
     
-    private final String logicTableName;
+    public ShardingValue(final String logicTableName, final String columnName, final T value) { this(logicTableName, columnName, value, Collections.<T>emptyList(), null); }
+    public ShardingValue(final String logicTableName, final String columnName, final Collection<T> values) {this(logicTableName, columnName, null, values, null); }
+    public ShardingValue(final String logicTableName, final String columnName, final Range<T> valueRange) { this(logicTableName, columnName, null, Collections.<T>emptyList(), valueRange); }
     
-    private final String columnName;
-    
-    private final T value;
-    
-    private final Collection<T> values;
-    
-    private final Range<T> valueRange;
-    
-    public ShardingValue(final String logicTableName, final String columnName, final T value) {
-        this(logicTableName, columnName, value, Collections.<T>emptyList(), null);
-    }
-    
-    public ShardingValue(final String logicTableName, final String columnName, final Collection<T> values) {
-        this(logicTableName, columnName, null, values, null);
-    }
-    
-    public ShardingValue(final String logicTableName, final String columnName, final Range<T> valueRange) {
-        this(logicTableName, columnName, null, Collections.<T>emptyList(), valueRange);
-    }
-    
-    /**
-     * 获取分片值类型.
-     * 
-     * @return 分片值类型
-     */
-    public ShardingValueType getType() {
+    /* 获取分片值类型 */
+    public ShardingValueType/*分片值类型*/ getType() {
         if (null != value) {
             return ShardingValueType.SINGLE;
         }
@@ -79,11 +57,7 @@ public final class ShardingValue<T extends Comparable<?>> {
         return ShardingValueType.RANGE;
     }
     
-    /**
-     * 分片值类型.
-     * 
-     * @author zhangliang
-     */
+    /* 分片值类型 */
     public enum ShardingValueType {
         SINGLE, LIST, RANGE
     }

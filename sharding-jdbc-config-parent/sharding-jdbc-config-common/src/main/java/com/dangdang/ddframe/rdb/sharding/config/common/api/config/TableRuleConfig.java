@@ -14,28 +14,18 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 表规则配置.
- * 
- * @author gaohongtao
- */
+/* 表规则配置 */
 @Getter
 @Setter
 public class TableRuleConfig {
-    
-    private boolean dynamic;
-    
-    private String actualTables;
-    
-    private String dataSourceNames;
-    
-    private StrategyConfig databaseStrategy;
-    
-    private StrategyConfig tableStrategy;
+    private boolean dynamic;                // TODO
+    private String actualTables;            // TODO
+    private String dataSourceNames;         // 数据源名
+    private StrategyConfig databaseStrategy;// TODO db的算法
+    private StrategyConfig tableStrategy;   // TODO 表的算法
 }
