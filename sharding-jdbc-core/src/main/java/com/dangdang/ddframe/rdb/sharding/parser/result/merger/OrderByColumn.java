@@ -23,22 +23,16 @@ import com.google.common.base.Optional;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * 排序列对象.
- * 
- * @author zhangliang
- */
+/* 排序列对象 */
 @Getter
 @ToString(callSuper = true)
 public final class OrderByColumn extends AbstractSortableColumn implements IndexColumn {
-    
-    private final Optional<Integer> index;
-    
+    private final Optional<Integer> index;  /* TODO */
     private int columnIndex;
     
     public OrderByColumn(final Optional<String> owner, final String name, final Optional<String> alias, final OrderByType orderByType) {
         super(owner, Optional.of(name), alias, orderByType);
-        index =  Optional.absent();
+        index =  Optional.absent(); /* 空值 */
     }
     
     public OrderByColumn(final String name, final OrderByType orderByType) {
@@ -69,12 +63,9 @@ public final class OrderByColumn extends AbstractSortableColumn implements Index
     public Optional<String> getColumnName() {
         return getName();
     }
-    
-    /**
-     * 排序类型.
-     * 
-     * @author gaohongtao, zhangliang
-     */
+
+
+    /* 排序类型 */
     public enum OrderByType {
         ASC, 
         DESC;

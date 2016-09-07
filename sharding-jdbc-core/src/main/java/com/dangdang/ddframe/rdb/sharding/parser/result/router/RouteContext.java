@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.router;
 
 import java.util.Collection;
@@ -25,20 +24,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * SQL路由上下文.
- * 
- * @author zhangliang
- */
+/* SQL路由上下文 */
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 public final class RouteContext {
-    
-    private final Collection<Table> tables = new LinkedHashSet<>();
-    
-    private SQLStatementType sqlStatementType;
-    
-    private SQLBuilder sqlBuilder;
+    private final Collection<Table> tables = new LinkedHashSet<>(); /* 逻辑sql中的逻辑表名 */
+    private SQLStatementType sqlStatementType;  /* sql类型 */
+    private SQLBuilder sqlBuilder;              /* TODO sql模板 */
 }

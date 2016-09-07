@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.merger;
 
 import com.google.common.base.Optional;
@@ -22,21 +21,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-/**
- * 可排序列.
- * 
- * @author gaohongtao.
- */
+/* 可排序列 */
 @ToString
 @Getter
 @RequiredArgsConstructor
 public abstract class AbstractSortableColumn {
+    private final Optional<String> owner;   /* TODO 表名 */
+    private final Optional<String> name;    /* 字段名 */
+    private final Optional<String> alias;   /* 别名 */
     
-    private final Optional<String> owner;
-    
-    private final Optional<String> name;
-    
-    private final Optional<String> alias;
-    
-    private final OrderByColumn.OrderByType orderByType;
+    private final OrderByColumn.OrderByType orderByType;    /* 升序还是降序 */
 }

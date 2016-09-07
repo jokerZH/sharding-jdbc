@@ -24,24 +24,18 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * SQL最小执行单元.
- * 
- * @author gaohongtao
- */
+/* SQL最小执行单元 */
 @Getter
 @Slf4j
 @ToString
 @EqualsAndHashCode(exclude = "sqlBuilder")
 public class SQLExecutionUnit {
-    
-    private final String dataSource;
-    
-    @Setter
-    private String sql;
-    
+    private final String dataSource;    /* 后端数据源 */
     private final SQLBuilder sqlBuilder;
+    @Setter
+    private String sql;     /* 执行的sql语句 */
     
+
     public SQLExecutionUnit(final String dataSource, final SQLBuilder sqlBuilder) {
         this.dataSource = dataSource;
         this.sqlBuilder = sqlBuilder.cloneBuilder();

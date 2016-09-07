@@ -25,18 +25,12 @@ import com.dangdang.ddframe.rdb.sharding.parser.result.router.SQLStatementType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * SQL路由结果.
- * 
- * @author gaohongtao
- */
+/* SQL路由结果 */
 @RequiredArgsConstructor
 @Getter
 public final class SQLRouteResult {
-    
-    private final SQLStatementType sqlStatementType;
-    
-    private final MergeContext mergeContext;
+    private final SQLStatementType sqlStatementType;    /* sql语句类型 */
+    private final MergeContext mergeContext;            /* 结果集合并需要的信息 */
     
     private final Set<SQLExecutionUnit> executionUnits = new HashSet<>();
 }

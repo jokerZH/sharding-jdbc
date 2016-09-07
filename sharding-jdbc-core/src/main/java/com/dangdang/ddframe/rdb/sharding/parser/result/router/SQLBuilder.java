@@ -25,42 +25,22 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-/**
- * SQL构建器.
- * 
- * @author gaohongtao
- */
+/* SQL构建器, 构建sql用的,特别中sql中有一些${xxx}这样的替换的地方的, append一般的,然后嗲用appendToken加入token,然后只要设置token的值就可以得到不同的sql语句  */
 public class SQLBuilder implements Appendable {
-    
     private final Collection<Object> segments = new LinkedList<>();
-    
-    private final Map<String, StringToken> tokenMap = new HashMap<>();
-    
-    private StringBuilder currentSegment;
+    private final Map<String/*token*/, StringToken> tokenMap = new HashMap<>();  /* TODO */
+    private StringBuilder currentSegment;   /* 存放结果sql语句 */
     
     public SQLBuilder() {
         currentSegment = new StringBuilder();
         segments.add(currentSegment);
     }
     
-    /**
-     * 增加占位符.
-     * 
-     * @param token 占位符
-     * @return SQL构建器
-     */
-    public SQLBuilder appendToken(final String token) {
-        return appendToken(token, true);
-    }
+    /* 增加占位符 */
+    public SQLBuilder appendToken(final String token/*占位符*/) { return appendToken(token, true); }
     
-    /**
-     * 增加占位符.
-     * 
-     * @param token 占位符
-     * @param isSetValue 是否设置占位值
-     * @return SQL构建器
-     */
-    public SQLBuilder appendToken(final String token, final boolean isSetValue) {
+    /* 增加占位符 */
+    public SQLBuilder appendToken(final String token/*占位符*/, final boolean isSetValue/*是否设置占位值*/) {
         StringToken stringToken;
         if (tokenMap.containsKey(token)) {
             stringToken = tokenMap.get(token);
@@ -77,36 +57,19 @@ public class SQLBuilder implements Appendable {
         return this;
     }
     
-    /**
-     * 用实际的值替代占位符.
-     * 
-     * @param originToken 占位符
-     * @param newToken 实际的值
-     * @return SQL构建器
-     */
-    public SQLBuilder buildSQL(final String originToken, final String newToken) {
+    /* 用实际的值替代占位符 */
+    public SQLBuilder buildSQL(final String originToken/*占位符*/, final String newToken/*实际的值*/) {
         if (tokenMap.containsKey(originToken)) {
             tokenMap.get(originToken).value = newToken;
         }
         return this;
     }
     
-    /**
-     * 是否包含占位符.
-     * 
-     * @param token 占位符
-     * @return true 包含 false 不包含
-     */
-    public boolean containsToken(final String token) {
-        return tokenMap.containsKey(token);
-    }
+    /* 是否包含占位符 */
+    public boolean containsToken(final String token/*占位符*/) { return tokenMap.containsKey(token); }
     
-    /**
-     * 生成SQL语句.
-     * 
-     * @return SQL语句
-     */
-    public String toSQL() {
+    /* 生成SQL语句, 将各个token和string输出 */
+    public String/*SQL语句*/ toSQL() {
         StringBuilder result = new StringBuilder();
         for (Object each : segments) {
             result.append(each.toString());
@@ -130,7 +93,8 @@ public class SQLBuilder implements Appendable {
         currentSegment.append(c);
         return this;
     }
-    
+
+    /* 显示调试信息 */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -144,11 +108,7 @@ public class SQLBuilder implements Appendable {
         return result.toString();
     }
     
-    /**
-     * 复制构建器.
-     * 
-     * @return 新的构建器
-     */
+    /* 复制构建器 */
     public SQLBuilder cloneBuilder() {
         SQLBuilder result = new SQLBuilder();
         for (Object each : segments) {
@@ -166,7 +126,6 @@ public class SQLBuilder implements Appendable {
     }
     
     private class StringToken {
-        
         private String value;
         
         public String toToken() {

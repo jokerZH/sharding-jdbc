@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.router;
 
 import com.dangdang.ddframe.rdb.sharding.parser.result.SQLParsedResult;
@@ -23,17 +22,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-/**
- * 预解析功能的SQL路由器.
- * 
- * @author gaohongtao
- */
+/* 预解析功能的SQL路由器 */
 @RequiredArgsConstructor
 public class PreparedSQLRouter {
-    
-    private final String logicSql;
-    
-    private final SQLRouteEngine engine;
+    private final String logicSql;          /* 逻辑sql */
+    private final SQLRouteEngine engine;    /* 路由引擎 */
     
     private SQLParsedResult sqlParsedResult;
     

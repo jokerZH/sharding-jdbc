@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.merger;
 
 import com.google.common.base.Optional;
@@ -27,45 +26,28 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 聚合列对象.
- * 
- * @author zhangliang
- */
+/* 聚合列对象 */
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
 public final class AggregationColumn implements IndexColumn {
+    private final String expression;                /* 表达式 */
+    private final AggregationType aggregationType;  /* 函数类型 */
+    private final Optional<String> alias;           /* 别名 */
+    private final Optional<String> option;          /* 选项 */
     
-    private final String expression;
-    
-    private final AggregationType aggregationType;
-    
-    private final Optional<String> alias;
-    
-    private final Optional<String> option;
-    
-    private final List<AggregationColumn> derivedColumns = new ArrayList<>(2);
+    private final List<AggregationColumn> derivedColumns = new ArrayList<>(2);  /* TODO */
     
     @Setter
     private int columnIndex = -1;
-    
+
     @Override
-    public Optional<String> getColumnLabel() {
-        return alias;
-    }
-    
+    public Optional<String> getColumnLabel() { return alias; }
     @Override
-    public Optional<String> getColumnName() {
-        return Optional.of(expression);
-    }
+    public Optional<String> getColumnName() { return Optional.of(expression); }
     
-    /**
-     * 聚合函数类型.
-     * 
-     * @author gaohongtao
-     */
+    /* 聚合函数类型 */
     public enum AggregationType {
         MAX, MIN, SUM, COUNT, AVG
     }

@@ -25,48 +25,28 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 条件对象.
- * 
- * @author gaohongtao
- */
+/* 条件对象, 表示一个  a = 1  */
 @RequiredArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 public final class Condition {
+    private final Column column;    /* 字段名 */
+    private final BinaryOperator operator;  /* operation */
+    private final List<Comparable<?>> values = new ArrayList<>();   /* 操作的值  */
+    private final List<Integer> valueIndices = new ArrayList<>();   /* paramMark的情况 */
     
-    private final Column column;
-    
-    private final BinaryOperator operator;
-    
-    private final List<Comparable<?>> values = new ArrayList<>();
-    
-    private final List<Integer> valueIndices = new ArrayList<>();
-    
-    /**
-     * 列对象.
-     * 
-     * @author gaohongtao
-     * @author zhangliang
-     */
+    /* 列对象 */
     @RequiredArgsConstructor
     @Getter
     @EqualsAndHashCode
     @ToString
     public static final class Column {
-        
-        private final String columnName;
-        
-        private final String tableName;
+        private final String columnName;    /* 字段名 */
+        private final String tableName;     /* 表名 */
     }
     
-    /**
-     * 操作符枚举.
-     * 
-     * @author gaohongtao
-     * @author zhangliang
-     */
+    /* 操作符枚举 */
     @RequiredArgsConstructor
     public enum BinaryOperator {
         
@@ -74,10 +54,7 @@ public final class Condition {
         
         @Getter
         private final String expression;
-        
         @Override
-        public String toString() {
-            return expression;
-        }
+        public String toString() { return expression; }
     }
 }

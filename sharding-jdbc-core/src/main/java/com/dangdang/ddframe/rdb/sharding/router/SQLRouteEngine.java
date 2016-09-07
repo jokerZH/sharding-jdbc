@@ -44,52 +44,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-/**
- * SQL路由引擎.
- * 
- * @author gaohongtao
- * @author zhangiang
- */
+/* SQL路由引擎 */
 @RequiredArgsConstructor
 @Slf4j
 public final class SQLRouteEngine {
-    
     private final ShardingRule shardingRule;
-    
     private final DatabaseType databaseType;
     
-    /**
-     * SQL路由.
-     *
-     * @param logicSql 逻辑SQL
-     * @return 路由结果
-     * @throws SQLParserException SQL解析失败异常
-     */
-    public SQLRouteResult route(final String logicSql) throws SQLParserException {
-        return route(logicSql, Collections.emptyList());
-    }
+    /* SQL路由 */
+    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/) throws SQLParserException { return route(logicSql, Collections.emptyList()); }
     
-    /**
-     * SQL路由.
-     * 
-     * @param logicSql 逻辑SQL
-     * @param parameters 参数列表
-     * @return 路由结果
-     * @throws SQLParserException SQL解析失败异常
-     */
-    public SQLRouteResult route(final String logicSql, final List<Object> parameters) throws SQLParserException {
-        return routeSQL(parseSQL(logicSql, parameters), parameters);
-    }
+    /* SQL路由 */
+    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/, final List<Object> parameters/*参数列表*/) throws SQLParserException { return routeSQL(parseSQL(logicSql, parameters), parameters); }
     
-    /**
-     * 预解析SQL路由.
-     * 
-     * @param logicSql 逻辑SQL
-     * @return 预解析SQL路由器
-     */
-    public PreparedSQLRouter prepareSQL(final String logicSql) {
-        return new PreparedSQLRouter(logicSql, this);
-    }
+    /* 预解析SQL路由 */
+    public PreparedSQLRouter/*预解析SQL路由器*/ prepareSQL(final String logicSql/*逻辑SQL*/) { return new PreparedSQLRouter(logicSql, this); }
     
     SQLParsedResult parseSQL(final String logicSql, final List<Object> parameters) {
         Context context = MetricsContext.start("Parse SQL");

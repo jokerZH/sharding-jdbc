@@ -14,16 +14,11 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.merger;
 
 import com.google.common.base.Optional;
 
-/**
- * 基于索引的列.
- *
- * @author gaohongtao
- */
+/* 基于索引的列 */
 public interface IndexColumn {
     
     void setColumnIndex(int index);

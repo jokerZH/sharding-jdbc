@@ -14,26 +14,16 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.constants;
 
 import com.dangdang.ddframe.rdb.sharding.exception.DatabaseTypeUnsupportedException;
 
-/**
- * 支持的数据库类型.
- * 
- * @author zhangliang
- */
+/* 支持的数据库类型 */
 public enum DatabaseType {
-    
+
     H2, MySQL, Oracle, SQLServer, DB2, PostgreSQL;
-    
-    /**
-     * 获取数据库类型枚举.
-     * 
-     * @param databaseProductName 数据库类型
-     * @return 数据库类型枚举
-     */
+
+    /* 获取数据库类型枚举 */
     public static DatabaseType valueFrom(final String databaseProductName) {
         try {
             return DatabaseType.valueOf(databaseProductName);

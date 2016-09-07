@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result;
 
 import java.util.ArrayList;
@@ -27,19 +26,11 @@ import com.dangdang.ddframe.rdb.sharding.parser.result.router.RouteContext;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * SQL解析结果.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* SQL解析结果 */
 @Getter
 @ToString
 public final class SQLParsedResult {
-    
     private final RouteContext routeContext = new RouteContext();
-    
     private final List<ConditionContext> conditionContexts = new ArrayList<>();
-    
     private final MergeContext mergeContext = new MergeContext();
 }

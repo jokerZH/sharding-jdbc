@@ -31,16 +31,12 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Limit {
-    
     public static final String OFFSET_NAME = "limit_offset";
-    
     public static final String COUNT_NAME = "limit_count";
     
     private final int offset;
-    
     private final int rowCount;
     
     private final Optional<Integer> offsetParameterIndex;
-    
     private final Optional<Integer> rowCountParameterIndex;
 }

@@ -24,58 +24,29 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 结果归并上下文.
- * 
- * @author zhangliang
- */
+/* 结果归并上下文 */
 @Getter
 @ToString
 public final class MergeContext {
-    
     private final List<OrderByColumn> orderByColumns = new ArrayList<>();
-    
     private final List<GroupByColumn> groupByColumns = new ArrayList<>();
-    
     private final List<AggregationColumn> aggregationColumns = new ArrayList<>();
     
     @Setter
     private Limit limit;
     
-    /**
-     * 是否包含分组.
-     * 
-     * @return 是否包含分组
-     */
-    public boolean hasGroupBy() {
-        return !groupByColumns.isEmpty();
-    }
+    /* 是否包含分组 */
+    public boolean hasGroupBy() { return !groupByColumns.isEmpty(); }
     
     /**
      * 判断是否为分组或者聚合计算.
      * 此处将聚合计算想象成为特殊的分组计算,统一进行处理.
-     *
-     * @return true:是分组或者聚合计算 false:不是分组且不是聚合计算
      */
-    public boolean hasGroupByOrAggregation() {
-        return hasGroupBy() || !aggregationColumns.isEmpty();
-    }
+    public boolean hasGroupByOrAggregation() { return hasGroupBy() || !aggregationColumns.isEmpty(); }
     
-    /**
-     * 判断是否包含排序列.
-     * 
-     * @return 是否包含排序列
-     */
-    public boolean hasOrderBy() {
-        return !orderByColumns.isEmpty();
-    }
+    /* 判断是否包含排序列 */
+    public boolean hasOrderBy() { return !orderByColumns.isEmpty(); }
     
-    /**
-     * 判断是否有限定结果集计算.
-     *
-     * @return true:是限定结果集计算 false:不是限定结果集计算
-     */
-    public boolean hasLimit() {
-        return null != limit;
-    }
+    /* 判断是否有限定结果集计算 */
+    public boolean hasLimit() { return null != limit; }
 }

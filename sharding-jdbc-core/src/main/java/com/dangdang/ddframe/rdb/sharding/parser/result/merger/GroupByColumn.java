@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.result.merger;
 
 import com.dangdang.ddframe.rdb.sharding.parser.result.merger.OrderByColumn.OrderByType;
@@ -23,11 +22,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * 分组列对象.
- * 
- * @author zhangliang
- */
+/* 分组列对象 */
 @Getter
 @ToString(callSuper = true)
 public final class GroupByColumn extends AbstractSortableColumn implements IndexColumn {
