@@ -31,37 +31,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 行内配置解析器.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 行内配置解析器 */
 @RequiredArgsConstructor
 public final class InlineParser {
-    
     private static final char SPLITTER = ',';
+    private final String inlineExpression;  // 需要处理的in语句
     
-    private final String inlineExpression;
-    
-    /**
-     * 分隔行内配置.
-     * 
-     * @return 分隔后的配置集合
-     */
+    /* 以,为分隔符号,产生字符串List */
     public List<String> split() {
         return Splitter.on(SPLITTER).trimResults().splitToList(inlineExpression);
     }
     
-    /**
-     * 分隔并求inline表达式值.
-     *
-     * @return 求值后的配置集合
-     */
+    /* 分隔并求inline表达式值 */
     public List<String> evaluate() {
         final GroovyShell shell = new GroovyShell();
         return flattenSegments(Lists.transform(splitWithInlineExpression(), new Function<String, Object>() {
-            
+
+            /* 处理in中各个表达式, 两边加上"", 然后用groovy执行这个脚本 */
             @Override
             public Object apply(final String input) {
                 StringBuilder expression = new StringBuilder(input);
@@ -75,7 +61,8 @@ public final class InlineParser {
             }
         }));
     }
-    
+
+    /* 以,为分隔符号,产生字符串List, 但是${,,}这种情况中的,不会用于分割  */
     List<String> splitWithInlineExpression() {
         List<String> result = new ArrayList<>();
         StringBuilder segment = new StringBuilder();
@@ -113,7 +100,8 @@ public final class InlineParser {
         }
         return result;
     }
-    
+
+    /* 处理in中各个执行结果, 就转乘String */
     private List<String> flattenSegments(final List<Object> segments) {
         List<String> result = new ArrayList<>();
         for (Object each : segments) {

@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 import lombok.Getter;
 import lombok.Setter;
 
-/* 分片规则配置 */
+/* 分片规则配置, 对一个逻辑DB的配置 */
 @Getter
 @Setter
 public class ShardingRuleConfig {
@@ -38,7 +38,7 @@ public class ShardingRuleConfig {
     /* 逻辑表到规则的映射 */
     private Map<String/*logicTableName*/, TableRuleConfig> tables = new HashMap<>();
 
-    /* TODO */
+    /* inner join的时候会用到 */
     private List<BindingTableRuleConfig> bindingTables = new ArrayList<>();
 
     /* 默认的分库算法 */

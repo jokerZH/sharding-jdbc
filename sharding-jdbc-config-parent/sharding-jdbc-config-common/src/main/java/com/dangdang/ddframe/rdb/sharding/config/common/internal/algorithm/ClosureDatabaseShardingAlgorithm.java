@@ -19,13 +19,8 @@ package com.dangdang.ddframe.rdb.sharding.config.common.internal.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.MultipleKeysDatabaseShardingAlgorithm;
 
-/**
- * 分库闭包算法.
- * 
- * @author gaohongtao
- */
+/** 分库闭包算法 根据配置的脚本表达式计算 */
 public class ClosureDatabaseShardingAlgorithm extends ClosureShardingAlgorithm implements MultipleKeysDatabaseShardingAlgorithm {
-    
     public ClosureDatabaseShardingAlgorithm(final String expression, final String logRoot) {
         super(expression, logRoot);
     }

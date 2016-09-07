@@ -14,15 +14,10 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.api.strategy.table;
 
 import com.dangdang.ddframe.rdb.sharding.router.strategy.SingleKeyShardingAlgorithm;
 
-/**
- * 单分片键的分表算法接口.
- * 
- * @author zhangliang
- */
+/* 单分片键的分表算法接口 */
 public interface SingleKeyTableShardingAlgorithm<T extends Comparable<?>> extends SingleKeyShardingAlgorithm<T>, TableShardingAlgorithm {
 }

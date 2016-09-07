@@ -19,7 +19,7 @@ package com.dangdang.ddframe.rdb.sharding.config.common.api.config;
 import lombok.Getter;
 import lombok.Setter;
 
-/* 表规则配置 */
+/* 表规则配置, 对应一个rule的配置 */
 @Getter
 @Setter
 public class TableRuleConfig {

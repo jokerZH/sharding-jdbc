@@ -25,5 +25,5 @@ import lombok.Setter;
 public class StrategyConfig {
     private String shardingColumns;     // 分表字段
     private String algorithmClassName;  // 算法类名
-    private String algorithmExpression; // TODO 算法表达式
+    private String algorithmExpression; // 计算表达式, 通过计算表达式指定分表算法
 }

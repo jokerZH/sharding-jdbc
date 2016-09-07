@@ -25,5 +25,5 @@ import java.util.Collection;
 public interface MultipleKeysShardingAlgorithm extends ShardingAlgorithm {
     
     /* 根据分片值计算分片结果名称集合 */
-    Collection<String> doSharding(Collection<String> availableTargetNames, Collection<ShardingValue<?>> shardingValues);
+    Collection<String/*TODO*/> doSharding(Collection<String> availableTargetNames, Collection<ShardingValue<?>> shardingValues);
 }

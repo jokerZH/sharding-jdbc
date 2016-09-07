@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/* 分库分表规则配置对象 */
+/* 分库分表规则配置对象, TODO 一个逻辑db上的表么 */
 @Getter
 public final class ShardingRule {
     private final DataSourceRule dataSourceRule;                        // db资源

@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc;
 
 import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
@@ -32,27 +31,26 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * 支持分片的数据源.
- * 
- * @author zhangliang
- */
+/* 支持分片的数据源 */
 public class ShardingDataSource extends AbstractDataSourceAdapter {
-    
     private final ShardingProperties shardingProperties;
-    
     private final ShardingContext shardingContext;
     
-    public ShardingDataSource(final ShardingRule shardingRule) {
-        this(shardingRule, new Properties());
-    }
-    
+    public ShardingDataSource(final ShardingRule shardingRule) { this(shardingRule, new Properties()); }
     public ShardingDataSource(final ShardingRule shardingRule, final Properties props) {
         Preconditions.checkNotNull(shardingRule);
         Preconditions.checkNotNull(props);
+
         shardingProperties = new ShardingProperties(props);
+
         try {
-            shardingContext = new ShardingContext(shardingRule, new SQLRouteEngine(shardingRule, DatabaseType.valueFrom(getDatabaseProductName(shardingRule))), new ExecutorEngine(shardingProperties));
+
+            shardingContext = new ShardingContext(
+                    shardingRule,
+                    new SQLRouteEngine(shardingRule, DatabaseType.valueFrom(getDatabaseProductName(shardingRule))),
+                    new ExecutorEngine(shardingProperties)
+            );
+
         } catch (final SQLException ex) {
             throw new ShardingJdbcException(ex);
         }

@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-/* 表规则配置对象 */
+/* 表规则配置对象, 对应一个逻辑表 */
 @Getter
 @ToString
 public final class TableRule {
@@ -67,15 +67,6 @@ public final class TableRule {
         }
     }
     
-    /**
-     * 获取表规则配置对象构建器.
-     *
-     * @param logicTable 逻辑表名称 
-     * @return 表规则配置对象构建器
-     */
-    public static TableRuleBuilder builder(final String logicTable) {
-        return new TableRuleBuilder(logicTable);
-    }
 
     /* 将dataSourceRule中的dbName和默认的动态物理表名构建actualTables */
     private List<DataNode> generateDataNodes(final DataSourceRule dataSourceRule) {
@@ -173,8 +164,19 @@ public final class TableRule {
         }
         return -1;
     }
-    
-    /* 表规则配置对象构建器 */
+
+
+    /**
+     * 获取表规则配置对象构建器.
+     *
+     * @param logicTable 逻辑表名称
+     * @return 表规则配置对象构建器
+     */
+    public static TableRuleBuilder builder(final String logicTable) {
+        return new TableRuleBuilder(logicTable);
+    }
+
+    /* 表规则配置对象构建器, 对应一个逻辑表 */
     @RequiredArgsConstructor
     public static class TableRuleBuilder {
         

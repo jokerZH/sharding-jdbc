@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config;
 
 import java.util.ArrayList;
@@ -25,14 +24,8 @@ import java.util.Set;
 import com.dangdang.ddframe.rdb.sharding.util.StringUtil;
 import com.google.common.base.Joiner;
 
-/**
- * Sharding-JDBC的配置属性.
- *
- * @author gaohongtao
- * @author zhangliang
- */
+/* Sharding-JDBC的配置属性 */
 public final class ShardingProperties {
-    
     private final Properties props;
     
     public ShardingProperties(final Properties props) {

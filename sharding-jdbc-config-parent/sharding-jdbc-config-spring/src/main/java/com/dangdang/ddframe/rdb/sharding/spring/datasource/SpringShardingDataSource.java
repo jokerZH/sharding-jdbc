@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.spring.datasource;
 
 import com.dangdang.ddframe.rdb.sharding.config.common.api.ShardingRuleBuilder;
@@ -23,11 +22,7 @@ import com.dangdang.ddframe.rdb.sharding.jdbc.ShardingDataSource;
 
 import java.util.Properties;
 
-/**
- * 基于Spring命名空间的分片数据源.
- *
- * @author caohao
- */
+/* 基于Spring命名空间的分片数据源 */
 public class SpringShardingDataSource extends ShardingDataSource {
     
     public SpringShardingDataSource(final ShardingRuleConfig shardingRuleConfig, final Properties props) {

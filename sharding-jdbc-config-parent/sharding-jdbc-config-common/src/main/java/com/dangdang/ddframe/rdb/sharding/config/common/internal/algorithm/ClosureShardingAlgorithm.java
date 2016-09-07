@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config.common.internal.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
@@ -34,23 +33,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 基于闭包的数据源划分算法.
- * 
- * @author gaohongtao
- */
+/* 基于闭包(计算表达式)的数据源划分算法 */
 public class ClosureShardingAlgorithm implements MultipleKeysShardingAlgorithm {
-    
-    private final Closure<?> closureTemplate;
-    
+    private final Closure<?> closureTemplate;   // 根据用户的计算表达式构建的对象
+
     public ClosureShardingAlgorithm(final String expression, final String logRoot) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(expression));
         Preconditions.checkArgument(!Strings.isNullOrEmpty(logRoot));
+
         Binding binding = new Binding();
         binding.setVariable("log", LoggerFactory.getLogger(Joiner.on(".").join("com.dangdang.ddframe.rdb.sharding.configFile", logRoot.trim())));
         closureTemplate = (Closure) new GroovyShell(binding).evaluate(Joiner.on("").join("{it -> \"", expression.trim(), "\"}"));
     }
-    
+
     @Override
     public Collection<String> doSharding(final Collection<String> availableTargetNames, final Collection<ShardingValue<?>> shardingValues) {
         List<Set<Comparable>> valuesDim = new ArrayList<>();

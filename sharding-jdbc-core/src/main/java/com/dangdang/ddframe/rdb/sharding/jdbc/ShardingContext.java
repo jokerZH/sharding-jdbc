@@ -23,18 +23,11 @@ import com.dangdang.ddframe.rdb.sharding.router.SQLRouteEngine;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 数据源运行期上下文.
- * 
- * @author gaohongtao
- */
+/* 数据源运行期上下文 */
 @RequiredArgsConstructor
 @Getter
 public final class ShardingContext {
-    
-    private final ShardingRule shardingRule;
-    
-    private final SQLRouteEngine sqlRouteEngine;
-    
-    private final ExecutorEngine executorEngine;
+    private final ShardingRule shardingRule;        /* 逻辑db上的逻辑表对象 */
+    private final SQLRouteEngine sqlRouteEngine;    /* TODO sql路由器 */
+    private final ExecutorEngine executorEngine;    /* 执行器 */
 }

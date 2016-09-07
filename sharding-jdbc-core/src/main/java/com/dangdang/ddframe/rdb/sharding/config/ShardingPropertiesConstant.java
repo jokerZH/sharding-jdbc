@@ -14,17 +14,12 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.config;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 配置项常量.
- * 
- * @author gaohongtao
- */
+/* 配置项常量 */
 @RequiredArgsConstructor
 @Getter
 public enum ShardingPropertiesConstant {

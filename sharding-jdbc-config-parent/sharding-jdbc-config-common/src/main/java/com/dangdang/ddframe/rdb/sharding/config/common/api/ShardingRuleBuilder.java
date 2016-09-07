@@ -52,12 +52,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/* 分片规则构建器 */
+/* 分片规则构建器, 存放的配置信息,产生运行时可以使用的结构 */
 @AllArgsConstructor
 public final class ShardingRuleBuilder {
-    private final String logRoot;                                   // 日志信息
+    private final String logRoot;                                                   // 日志信息
     private final Map<String/*dataSourceName*/, DataSource> externalDataSourceMap;  // db资源
-    private final ShardingRuleConfig shardingRuleConfig;            // 总的分表规则
+    private final ShardingRuleConfig shardingRuleConfig;                            // 总的分表规则
 
     public ShardingRuleBuilder(final ShardingRuleConfig shardingRuleConfig) { this("default", shardingRuleConfig); }
     public ShardingRuleBuilder(final String logRoot, final ShardingRuleConfig shardingRuleConfig) { this(logRoot, Collections.<String, DataSource>emptyMap(), shardingRuleConfig); }
@@ -66,26 +66,35 @@ public final class ShardingRuleBuilder {
     public ShardingRule build() {
         DataSourceRule dataSourceRule = buildDataSourceRule();
         Collection<TableRule> tableRules = buildTableRules(dataSourceRule);
-        return ShardingRule.builder().dataSourceRule(dataSourceRule).tableRules(tableRules).bindingTableRules(buildBindingTableRules(tableRules))
+        return ShardingRule.builder()
+                .dataSourceRule(dataSourceRule)
+                .tableRules(tableRules)
+                .bindingTableRules(buildBindingTableRules(tableRules))
                 .databaseShardingStrategy(buildShardingStrategy(shardingRuleConfig.getDefaultDatabaseStrategy(), DatabaseShardingStrategy.class))
                 .tableShardingStrategy(buildShardingStrategy(shardingRuleConfig.getDefaultTableStrategy(), TableShardingStrategy.class)).build();
     }
-    
+
+    /* 获得一个dataSource的集合 */
     private DataSourceRule buildDataSourceRule() {
         Preconditions.checkArgument(!shardingRuleConfig.getDataSource().isEmpty() || MapUtils.isNotEmpty(externalDataSourceMap), "Sharding JDBC: No data source config");
         return shardingRuleConfig.getDataSource().isEmpty() ? new DataSourceRule(externalDataSourceMap, shardingRuleConfig.getDefaultDataSourceName())
                 : new DataSourceRule(shardingRuleConfig.getDataSource(), shardingRuleConfig.getDefaultDataSourceName());
     }
-    
+
+    /* 根据配置构造单个逻辑表对象 */
     private Collection<TableRule> buildTableRules(final DataSourceRule dataSourceRule) {
         Collection<TableRule> result = new ArrayList<>(shardingRuleConfig.getTables().size());
         for (Entry<String, TableRuleConfig> each : shardingRuleConfig.getTables().entrySet()) {
             String logicTable = each.getKey();
             TableRuleConfig tableRuleConfig = each.getValue();
-            TableRule.TableRuleBuilder tableRuleBuilder = TableRule.builder(logicTable).dataSourceRule(dataSourceRule)
-                    .dynamic(tableRuleConfig.isDynamic())
-                    .databaseShardingStrategy(buildShardingStrategy(tableRuleConfig.getDatabaseStrategy(), DatabaseShardingStrategy.class))
-                    .tableShardingStrategy(buildShardingStrategy(tableRuleConfig.getTableStrategy(), TableShardingStrategy.class));
+
+            TableRule.TableRuleBuilder tableRuleBuilder =
+                    TableRule.builder(logicTable)
+                        .dataSourceRule(dataSourceRule)
+                        .dynamic(tableRuleConfig.isDynamic())
+                        .databaseShardingStrategy(buildShardingStrategy(tableRuleConfig.getDatabaseStrategy(), DatabaseShardingStrategy.class))
+                        .tableShardingStrategy(buildShardingStrategy(tableRuleConfig.getTableStrategy(), TableShardingStrategy.class));
+
             if (null != tableRuleConfig.getActualTables()) {
                 tableRuleBuilder.actualTables(new InlineParser(tableRuleConfig.getActualTables()).evaluate());
             }
@@ -119,27 +128,40 @@ public final class ShardingRuleBuilder {
         }
         throw new IllegalArgumentException(String.format("Sharding JDBC: Binding table `%s` is not an available Table rule", logicTableName));
     }
-    
+
+    /* 构造算法对象 */
     private <T extends ShardingStrategy> T buildShardingStrategy(final StrategyConfig config, final Class<T> returnClass) {
         if (null == config) {
             return null;
         }
-        Preconditions.checkArgument(Strings.isNullOrEmpty(config.getAlgorithmExpression()) && !Strings.isNullOrEmpty(config.getAlgorithmClassName())
-                || !Strings.isNullOrEmpty(config.getAlgorithmExpression()) && Strings.isNullOrEmpty(config.getAlgorithmClassName()));
-        Preconditions.checkState(returnClass.isAssignableFrom(DatabaseShardingStrategy.class) || returnClass.isAssignableFrom(TableShardingStrategy.class), "Sharding-JDBC: returnClass is illegal");
+        Preconditions.checkArgument(
+                                Strings.isNullOrEmpty(config.getAlgorithmExpression())
+                            && !Strings.isNullOrEmpty(config.getAlgorithmClassName())
+                            || !Strings.isNullOrEmpty(config.getAlgorithmExpression())
+                            &&  Strings.isNullOrEmpty(config.getAlgorithmClassName())
+                        );
+
+        Preconditions.checkState(
+                                returnClass.isAssignableFrom(DatabaseShardingStrategy.class)
+                            ||  returnClass.isAssignableFrom(TableShardingStrategy.class), "Sharding-JDBC: returnClass is illegal");
+
         List<String> shardingColumns = new InlineParser(config.getShardingColumns()).split();
         if (Strings.isNullOrEmpty(config.getAlgorithmClassName())) {
             return buildShardingAlgorithmExpression(shardingColumns, config.getAlgorithmExpression(), returnClass);
         }
         return buildShardingAlgorithmClassName(shardingColumns, config.getAlgorithmClassName(), returnClass);
     }
-    
+
+    /* 根据算法表达式构建分表算法 */
     @SuppressWarnings("unchecked")
     private <T extends ShardingStrategy> T buildShardingAlgorithmExpression(final List<String> shardingColumns, final String algorithmExpression, final Class<T> returnClass) {
-        return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns, new ClosureDatabaseShardingAlgorithm(algorithmExpression, logRoot))
+        // 根据returnClass的类型判断当前是分库还是分表
+        return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ?
+                  (T) new DatabaseShardingStrategy(shardingColumns, new ClosureDatabaseShardingAlgorithm(algorithmExpression, logRoot))
                 : (T) new TableShardingStrategy(shardingColumns, new ClosureTableShardingAlgorithm(algorithmExpression, logRoot));
     }
-    
+
+    /* 根据java类来实现分表算法 */
     @SuppressWarnings("unchecked")
     private <T extends ShardingStrategy> T buildShardingAlgorithmClassName(final List<String> shardingColumns, final String algorithmClassName, final Class<T> returnClass) {
         ShardingAlgorithm shardingAlgorithm;
@@ -148,13 +170,19 @@ public final class ShardingRuleBuilder {
         } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
             throw new IllegalArgumentException(ex);
         }
-        Preconditions.checkState(shardingAlgorithm instanceof SingleKeyShardingAlgorithm || shardingAlgorithm instanceof MultipleKeysShardingAlgorithm, "Sharding-JDBC: algorithmClassName is illegal");
+
+        Preconditions.checkState(
+                            shardingAlgorithm instanceof SingleKeyShardingAlgorithm
+                        ||  shardingAlgorithm instanceof MultipleKeysShardingAlgorithm, "Sharding-JDBC: algorithmClassName is illegal");
+
         if (shardingAlgorithm instanceof SingleKeyShardingAlgorithm) {
             Preconditions.checkArgument(1 == shardingColumns.size(), "Sharding-JDBC: SingleKeyShardingAlgorithm must have only ONE sharding column");
-            return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns.get(0), (SingleKeyDatabaseShardingAlgorithm<?>) shardingAlgorithm)
-                    : (T) new TableShardingStrategy(shardingColumns.get(0), (SingleKeyTableShardingAlgorithm<?>) shardingAlgorithm);
+            return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ?
+                        (T) new DatabaseShardingStrategy(shardingColumns.get(0), (SingleKeyDatabaseShardingAlgorithm<?>) shardingAlgorithm)
+                      : (T) new TableShardingStrategy(shardingColumns.get(0), (SingleKeyTableShardingAlgorithm<?>) shardingAlgorithm);
         }
-        return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ? (T) new DatabaseShardingStrategy(shardingColumns, (MultipleKeysDatabaseShardingAlgorithm) shardingAlgorithm) 
-                : (T) new TableShardingStrategy(shardingColumns, (MultipleKeysTableShardingAlgorithm) shardingAlgorithm);
+        return returnClass.isAssignableFrom(DatabaseShardingStrategy.class) ?
+                    (T) new DatabaseShardingStrategy(shardingColumns, (MultipleKeysDatabaseShardingAlgorithm) shardingAlgorithm)
+                  : (T) new TableShardingStrategy(shardingColumns, (MultipleKeysTableShardingAlgorithm) shardingAlgorithm);
     }
 }
