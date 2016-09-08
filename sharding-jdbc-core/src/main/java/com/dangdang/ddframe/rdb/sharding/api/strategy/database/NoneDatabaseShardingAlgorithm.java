@@ -21,11 +21,7 @@ import java.util.Collection;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 
-/**
- * 无需分库的分片算法.
- * 
- * @author zhangliang
- */
+/* 无需分库的分片算法 直接把参数返回 */
 public final class NoneDatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgorithm<String>, MultipleKeysDatabaseShardingAlgorithm {
     
     @Override

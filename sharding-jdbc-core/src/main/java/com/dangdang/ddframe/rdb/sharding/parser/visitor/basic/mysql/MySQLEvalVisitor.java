@@ -22,11 +22,7 @@ import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlEvalVisitorImpl;
 
 import java.util.Map;
 
-/**
- * MySQL变量中提取参数值与编号.
- * 
- * @author gaohongtao.
- */
+/* MySQL变量中提取参数值与编号 */
 public class MySQLEvalVisitor extends MySqlEvalVisitorImpl {
     
     public static final String EVAL_VAR_INDEX = "EVAL_VAR_INDEX";

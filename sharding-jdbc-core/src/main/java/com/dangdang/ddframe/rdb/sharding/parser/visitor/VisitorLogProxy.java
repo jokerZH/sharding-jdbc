@@ -29,11 +29,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-/**
- * SQL解析日志打印.
- * 
- * @author gaohongtao
- */
+/* SQL解析日志打印 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class VisitorLogProxy {

@@ -14,19 +14,13 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.visitor.basic.mysql;
 
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.dangdang.ddframe.rdb.sharding.parser.result.router.Condition.BinaryOperator;
 import com.google.common.base.Optional;
 
-/**
- * MySQL的INSERT语句访问器.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* MySQL的INSERT语句访问器 */
 public class MySQLInsertVisitor extends AbstractMySQLVisitor {
     
     @Override
@@ -35,6 +29,8 @@ public class MySQLInsertVisitor extends AbstractMySQLVisitor {
         if (null == x.getValues()) {
             return super.visit(x);
         }
+
+        // 增加计算表达式
         for (int i = 0; i < x.getColumns().size(); i++) {
             getParseContext().addCondition(x.getColumns().get(i).toString(), x.getTableName().toString(), BinaryOperator.EQUAL, x.getValues().getValues().get(i), getDatabaseType(), getParameters());
         }

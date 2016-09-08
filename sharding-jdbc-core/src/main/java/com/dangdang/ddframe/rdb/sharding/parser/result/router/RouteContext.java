@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/* SQL路由上下文 */
+/* SQL路由上下文, 从sql中解析出逻辑表名和sql中需要替换的地方 */
 @Getter
 @Setter
 @ToString
@@ -32,5 +32,5 @@ import lombok.ToString;
 public final class RouteContext {
     private final Collection<Table> tables = new LinkedHashSet<>(); /* 逻辑sql中的逻辑表名 */
     private SQLStatementType sqlStatementType;  /* sql类型 */
-    private SQLBuilder sqlBuilder;              /* TODO sql模板 */
+    private SQLBuilder sqlBuilder;              /* sql模板, 用于产生最终的sql语句 */
 }

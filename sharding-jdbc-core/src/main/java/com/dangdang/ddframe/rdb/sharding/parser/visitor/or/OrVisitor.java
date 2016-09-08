@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.visitor.or;
 
 import com.alibaba.druid.sql.ast.SQLObject;
@@ -29,19 +28,15 @@ import com.dangdang.ddframe.rdb.sharding.parser.visitor.or.node.CompositeOrASTNo
 import com.dangdang.ddframe.rdb.sharding.parser.visitor.or.node.SimpleOrASTNode;
 import com.google.common.base.Optional;
 
-/**
- * 逻辑OR条件访问器.
- * 
- * @author gaohongtao
- */
+/* 逻辑OR条件访问器 */
 public class OrVisitor extends AbstractMySQLVisitor {
-    
     private AbstractOrASTNode orASTNode;
     
     public OrVisitor(final SQLASTOutputVisitor dependencyVisitor) {
         setParameters(dependencyVisitor.getParameters());
         SQLVisitor visitor = (SQLVisitor) dependencyVisitor;
         if (null != visitor.getParseContext().getCurrentTable()) {
+            // 设置当前解析上下文
             getParseContext().setCurrentTable(visitor.getParseContext().getCurrentTable().getName(), Optional.<String>absent());
         }
         getParseContext().getParsedResult().getRouteContext().getTables().addAll(visitor.getParseContext().getParsedResult().getRouteContext().getTables());
@@ -80,12 +75,7 @@ public class OrVisitor extends AbstractMySQLVisitor {
         orASTNode.createOrASTAsRootNode();
     }
     
-    /**
-     * 逻辑OR访问器, 每次只解析一层OR条件.
-     * 
-     * @param x 二元表达式
-     * @return false 停止访问AST
-     */
+    /* 逻辑OR访问器, 每次只解析一层OR条件 */
     @Override
     public boolean visit(final SQLBinaryOpExpr x) {
         if (!SQLBinaryOperator.BooleanOr.equals(x.getOperator())) {

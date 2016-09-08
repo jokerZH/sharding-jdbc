@@ -27,7 +27,7 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 public final class OrderByColumn extends AbstractSortableColumn implements IndexColumn {
-    private final Optional<Integer> index;  /* TODO */
+    private final Optional<Integer> index;  /* column下标 */
     private int columnIndex;
     
     public OrderByColumn(final Optional<String> owner, final String name, final Optional<String> alias, final OrderByType orderByType) {

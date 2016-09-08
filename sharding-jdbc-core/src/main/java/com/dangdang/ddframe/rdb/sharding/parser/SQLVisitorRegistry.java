@@ -31,20 +31,12 @@ import com.dangdang.ddframe.rdb.sharding.parser.visitor.basic.mysql.MySQLUpdateV
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * SQL访问器注册表.
- * 
- * @author zhangliang
- */
+/* SQL访问器注册表 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQLVisitorRegistry {
-    
     private static final Map<DatabaseType, Class<? extends SQLASTOutputVisitor>> SELECT_REGISTRY = new HashMap<>(DatabaseType.values().length);
-    
     private static final Map<DatabaseType, Class<? extends SQLASTOutputVisitor>> INSERT_REGISTRY = new HashMap<>(DatabaseType.values().length);
-    
     private static final Map<DatabaseType, Class<? extends SQLASTOutputVisitor>> UPDATE_REGISTRY = new HashMap<>(DatabaseType.values().length);
-    
     private static final Map<DatabaseType, Class<? extends SQLASTOutputVisitor>> DELETE_REGISTRY = new HashMap<>(DatabaseType.values().length);
     
     static {
@@ -94,45 +86,14 @@ public final class SQLVisitorRegistry {
         INSERT_REGISTRY.put(DatabaseType.PostgreSQL, MySQLDeleteVisitor.class);
     }
     
-    /**
-     * 获取SELECT访问器.
-     * 
-     * @param databaseType 数据库类型
-     * @return SELECT访问器
-     */
-    public static Class<? extends SQLASTOutputVisitor> getSelectVistor(final DatabaseType databaseType) {
-        return getVistor(databaseType, SELECT_REGISTRY);
-    }
-    
-    /**
-     * 获取INSERT访问器.
-     * 
-     * @param databaseType 数据库类型
-     * @return INSERT访问器
-     */
-    public static Class<? extends SQLASTOutputVisitor> getInsertVistor(final DatabaseType databaseType) {
-        return getVistor(databaseType, INSERT_REGISTRY);
-    }
-    
-    /**
-     * 获取UPDATE访问器.
-     * 
-     * @param databaseType 数据库类型
-     * @return UPDATE访问器
-     */
-    public static Class<? extends SQLASTOutputVisitor> getUpdateVistor(final DatabaseType databaseType) {
-        return getVistor(databaseType, UPDATE_REGISTRY);
-    }
-    
-    /**
-     * 获取DELETE访问器.
-     * 
-     * @param databaseType 数据库类型
-     * @return DELETE访问器
-     */
-    public static Class<? extends SQLASTOutputVisitor> getDeleteVistor(final DatabaseType databaseType) {
-        return getVistor(databaseType, DELETE_REGISTRY);
-    }
+    /* 获取SELECT访问器 */
+    public static Class<? extends SQLASTOutputVisitor> getSelectVistor(final DatabaseType databaseType) { return getVistor(databaseType, SELECT_REGISTRY); }
+    /* 获取INSERT访问器 */
+    public static Class<? extends SQLASTOutputVisitor> getInsertVistor(final DatabaseType databaseType) { return getVistor(databaseType, INSERT_REGISTRY); }
+    /* 获取UPDATE访问器 */
+    public static Class<? extends SQLASTOutputVisitor> getUpdateVistor(final DatabaseType databaseType) { return getVistor(databaseType, UPDATE_REGISTRY); }
+    /* 获取DELETE访问器 */
+    public static Class<? extends SQLASTOutputVisitor> getDeleteVistor(final DatabaseType databaseType) { return getVistor(databaseType, DELETE_REGISTRY); }
     
     private static Class<? extends SQLASTOutputVisitor> getVistor(final DatabaseType databaseType, final Map<DatabaseType, Class<? extends SQLASTOutputVisitor>> registry) {
         if (!registry.containsKey(databaseType)) {

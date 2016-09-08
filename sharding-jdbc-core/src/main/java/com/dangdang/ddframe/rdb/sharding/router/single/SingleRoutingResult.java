@@ -34,17 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * 单表路由结果.
- * 
- * @author gaohongtao
- */
+/* 单逻辑表路由结果 */
 @ToString
 public class SingleRoutingResult implements RoutingResult {
-    
     @Getter
-    private final List<SingleRoutingDataSource> routingDataSources = new ArrayList<>();
-    
+    private final List<SingleRoutingDataSource> routingDataSources = new ArrayList<>(); /* 路由结果 */
+
     void put(final String dataSourceName, final SingleRoutingTableFactor routingTableFactor) {
         for (SingleRoutingDataSource each : routingDataSources) {
             if (each.getDataSource().equals(dataSourceName)) {
@@ -55,12 +50,7 @@ public class SingleRoutingResult implements RoutingResult {
         routingDataSources.add(new SingleRoutingDataSource(dataSourceName, routingTableFactor));
     }
     
-    /**
-     * 根据数据源名称获取数据源和逻辑表名称集合的映射关系.
-     * 
-     * @param dataSources 待获取的数据源名称集合
-     * @return 数据源和逻辑表名称集合的映射关系
-     */
+    /* 根据数据源名称获取数据源和逻辑表名称集合的映射关系 */
     public Map<String, Set<String>> getDataSourceLogicTablesMap(final Collection<String> dataSources) {
         Map<String, Set<String>> result = new HashMap<>();
         for (SingleRoutingDataSource each : routingDataSources) {
@@ -80,11 +70,7 @@ public class SingleRoutingResult implements RoutingResult {
         return result;
     }
     
-    /**
-     * 获取全部数据源名称.
-     * 
-     * @return 数据源名称集合
-     */
+    /* 获取全部数据源名称 */
     public Collection<String> getDataSources() {
         return Lists.transform(routingDataSources, new Function<SingleRoutingDataSource, String>() {
             
@@ -95,16 +81,7 @@ public class SingleRoutingResult implements RoutingResult {
         });
     }
     
-    /**
-     * 根据数据源和逻辑表名称获取真实表集合组.
-     * <p>
-     * 每一组的真实表集合都属于同一逻辑表.
-     * </p>
-     * 
-     * @param dataSource 数据源名称
-     * @param logicTables 逻辑表名称集合
-     * @return 真实表集合组
-     */
+    /* 根据数据源和逻辑表名称获取真实表集合组 */
     public List<Set<String>> getActualTableGroups(final String dataSource, final Set<String> logicTables) {
         Optional<SingleRoutingDataSource> routingDataSource = findRoutingDataSource(dataSource);
         if (!routingDataSource.isPresent()) {
@@ -113,13 +90,7 @@ public class SingleRoutingResult implements RoutingResult {
         return routingDataSource.get().getActualTableGroups(logicTables);
     }
     
-    /**
-     * 根据数据源和真实表名称查找路由表单元.
-     * 
-     * @param dataSource 数据源名称
-     * @param actualTable 真实表名称
-     * @return 查找结果
-     */
+    /* 根据数据源和真实表名称查找路由表单元 */
     public Optional<SingleRoutingTableFactor> findRoutingTableFactor(final String dataSource, final String actualTable) {
         Optional<SingleRoutingDataSource> routingDataSource = findRoutingDataSource(dataSource);
         if (!routingDataSource.isPresent()) {

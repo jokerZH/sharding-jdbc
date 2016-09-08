@@ -24,13 +24,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-/* 表解析对象 */
+/* 表解析对象, 对应一个逻辑表名 */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
 public class Table {
-    private final String name;  /* 逻辑表名 */
+    private final String name;              /* 逻辑表名 */
     private final Optional<String> alias;   /* 别名 */
     
     public Table(final String name, final String alias) { this(name, Optional.fromNullable(alias)); }

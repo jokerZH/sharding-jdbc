@@ -32,25 +32,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 单表路由数据源.
- * 
- * @author zhangliang
- */
+/* 单表路由数据源 */
 @RequiredArgsConstructor
 @Getter
 @ToString
 public class SingleRoutingDataSource {
-    
-    private final String dataSource;
-    
-    private final List<SingleRoutingTableFactor> routingTableFactors = new ArrayList<>();
+    private final String dataSource;                                                        /* DB */
+    private final List<SingleRoutingTableFactor> routingTableFactors = new ArrayList<>();   /* 表 */
     
     SingleRoutingDataSource(final String dataSource, final SingleRoutingTableFactor routingTableFactor) {
         this(dataSource);
         routingTableFactors.add(routingTableFactor);
     }
-    
+
+    /* 产生SQLExecutionUnit */
     Collection<SQLExecutionUnit> getSQLExecutionUnits(final SQLBuilder sqlBuilder) {
         Collection<SQLExecutionUnit> result = new ArrayList<>();
         for (SingleRoutingTableFactor each : routingTableFactors) {
@@ -59,7 +54,8 @@ public class SingleRoutingDataSource {
         }
         return result;
     }
-    
+
+    /* 获得逻辑表集合 */
     Set<String> getLogicTables() {
         Set<String> result = new HashSet<>(routingTableFactors.size());
         result.addAll(Lists.transform(routingTableFactors, new Function<SingleRoutingTableFactor, String>() {
@@ -71,7 +67,8 @@ public class SingleRoutingDataSource {
         }));
         return result;
     }
-    
+
+    /* 获得各个逻辑表对应的物理表集合 */
     List<Set<String>> getActualTableGroups(final Set<String> logicTables) {
         List<Set<String>> result = new ArrayList<>();
         for (String logicTable : logicTables) {
@@ -82,7 +79,8 @@ public class SingleRoutingDataSource {
         }
         return result;
     }
-    
+
+    /* 获得逻辑表对应的物理表 */
     private Set<String> getActualTables(final String logicTable) {
         Set<String> result = new HashSet<>();
         for (SingleRoutingTableFactor each : routingTableFactors) {
@@ -92,7 +90,8 @@ public class SingleRoutingDataSource {
         }
         return result;
     }
-    
+
+    /* 获得物理表对应的SingleRoutingTableFactor结构 */
     Optional<SingleRoutingTableFactor> findRoutingTableFactor(final String actualTable) {
         for (SingleRoutingTableFactor each : routingTableFactors) {
             if (each.getActualTable().equals(actualTable)) {

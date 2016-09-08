@@ -40,7 +40,7 @@ public final class AggregationColumn implements IndexColumn {
     private final List<AggregationColumn> derivedColumns = new ArrayList<>(2);  /* TODO */
     
     @Setter
-    private int columnIndex = -1;
+    private int columnIndex = -1;   /* 字段的下标 */
 
     @Override
     public Optional<String> getColumnLabel() { return alias; }

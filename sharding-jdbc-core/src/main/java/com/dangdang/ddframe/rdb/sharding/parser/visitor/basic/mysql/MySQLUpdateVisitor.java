@@ -14,18 +14,12 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.visitor.basic.mysql;
 
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import com.google.common.base.Optional;
 
-/**
- * MySQL的UPDATE语句访问器.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* MySQL的UPDATE语句访问器 */
 public class MySQLUpdateVisitor extends AbstractMySQLVisitor {
     
     @Override

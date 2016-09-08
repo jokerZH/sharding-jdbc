@@ -30,7 +30,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public final class SQLParsedResult {
-    private final RouteContext routeContext = new RouteContext();
-    private final List<ConditionContext> conditionContexts = new ArrayList<>();
-    private final MergeContext mergeContext = new MergeContext();
+    private final RouteContext routeContext = new RouteContext();               // 结果路由信息,如到那个逻辑表上
+    private final List<ConditionContext> conditionContexts = new ArrayList<>(); // where后面的表达式
+    private final MergeContext mergeContext = new MergeContext();               // 聚合函数
 }

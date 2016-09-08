@@ -55,7 +55,8 @@ public final class ConditionContext {
     public boolean isEmpty() { return conditions.isEmpty(); }
     public void clear() { conditions.clear(); }
     public Collection<Condition> getAllConditions() { return conditions.values(); }
-    
+
+    /* 替换paramMark ? */
     public void setNewConditionValue(final List<Object> parameters) {
         for (Condition each : conditions.values()) {
             if (each.getValueIndices().isEmpty()) {

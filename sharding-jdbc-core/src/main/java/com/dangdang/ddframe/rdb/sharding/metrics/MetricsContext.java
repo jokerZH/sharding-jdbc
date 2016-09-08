@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.metrics;
 
 import com.codahale.metrics.MetricRegistry;
@@ -25,29 +24,14 @@ import com.dangdang.ddframe.rdb.sharding.config.ShardingPropertiesConstant;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.TimeUnit;
 
-/**
- * 度量上下文持有者.
- * 
- * <p>
- * 多个ShardingDataSource使用静态度量上下文会造成数据污染, 所以将度量上下文对象绑定到ThreadLocal中.
- * </p>
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 度量上下文持有者 信息监控 如处理时间 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MetricsContext {
-    
     private static final ThreadLocal<MetricRegistry> HOLDER = new ThreadLocal<>();
     
-    /**
-     * 初始化度量上下文持有者.
-     * 
-     * @param shardingProperties Sharding-JDBC的配置属性
-     */
+    /* 初始化度量上下文持有者 */
     public static void init(final ShardingProperties shardingProperties) {
         HOLDER.remove();
         boolean metricsEnabled = shardingProperties.getValue(ShardingPropertiesConstant.METRICS_ENABLE);
@@ -66,32 +50,18 @@ public final class MetricsContext {
         HOLDER.set(metricRegistry);
     }
     
-    /**
-     * 开始计时.
-     *
-     * @param name 度量目标名称
-     *
-     * @return 计时上下文
-     */
-    public static Timer.Context start(final String name) {
+    /* 开始计时 */
+    public static Timer.Context start(final String name/*度量目标名称*/) {
         return null == HOLDER.get() ? null : HOLDER.get().timer(MetricRegistry.name(name)).time();
     }
-    
-    /**
-     * 停止计时.
-     *
-     * @param context 计时上下文
-     */
-    public static void stop(final Timer.Context context) {
+
+    /* 停止计时 */
+    public static void stop(final Timer.Context context/*计时上下文*/) {
         if (null != context) {
             context.stop();
         }
     }
     
-    /**
-     * 清理数据.
-     */
-    public static void clear() {
-        HOLDER.remove();
-    }
+    /* 清理数据 */
+    public static void clear() { HOLDER.remove(); }
 }

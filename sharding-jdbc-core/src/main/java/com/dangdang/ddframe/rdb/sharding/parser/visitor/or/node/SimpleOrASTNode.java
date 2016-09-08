@@ -26,11 +26,7 @@ import com.google.common.base.Optional;
 
 import lombok.AllArgsConstructor;
 
-/**
- * 只包含OR的节点.
- * 
- * @author gaohongtao
- */
+/* 只包含OR的节点 */
 @AllArgsConstructor
 public class SimpleOrASTNode extends AbstractOrASTNode {
     

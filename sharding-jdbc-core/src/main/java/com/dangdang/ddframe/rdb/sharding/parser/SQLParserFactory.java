@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser;
 
 import java.util.Collection;
@@ -39,33 +38,24 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * SQL解析器工厂.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* SQL解析器工厂 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class SQLParserFactory {
-    
-    /**
-     * 创建解析器引擎对象.
-     * 
-     * @param databaseType 数据库类型
-     * @param sql SQL语句
-     * @param parameters SQL中参数的值
-     * @param shardingColumns 分片列名称集合
-     * @return 解析器引擎对象
-     * @throws SQLParserException SQL解析异常
-     */
-    public static SQLParseEngine create(final DatabaseType databaseType, final String sql, final List<Object> parameters, final Collection<String> shardingColumns) throws SQLParserException {
+    /* 创建解析器引擎对象 */
+    public static SQLParseEngine/*解析器引擎对象*/ create(
+            final DatabaseType databaseType,            /*数据库类型*/
+            final String sql,                           /*SQL语句*/
+            final List<Object> parameters,              /*SQL中参数的值*/
+            final Collection<String> shardingColumns    /*分片列名称集合*/
+    ) throws SQLParserException {
         log.debug("Logic SQL: {}", sql);
         SQLStatement sqlStatement = getSQLStatementParser(databaseType, sql).parseStatement();
         log.trace("Get {} SQL Statement", sqlStatement.getClass().getName());
         return new SQLParseEngine(sqlStatement, parameters, getSQLVisitor(databaseType, sqlStatement), shardingColumns);
     }
-    
+
+    /* 解析sql语句 */
     private static SQLStatementParser getSQLStatementParser(final DatabaseType databaseType, final String sql) {
         switch (databaseType) {
             case H2: 
@@ -81,7 +71,8 @@ public final class SQLParserFactory {
                 throw new UnsupportedOperationException(String.format("Cannot support database type [%s]", databaseType));
         }
     }
-    
+
+    /* 获得用于输出sql语句的visitor */
     private static SQLASTOutputVisitor getSQLVisitor(final DatabaseType databaseType, final SQLStatement sqlStatement) {
         if (sqlStatement instanceof SQLSelectStatement) {
             return VisitorLogProxy.enhance(SQLVisitorRegistry.getSelectVistor(databaseType));

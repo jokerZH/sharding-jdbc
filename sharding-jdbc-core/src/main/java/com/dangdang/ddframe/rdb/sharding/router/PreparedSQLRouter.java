@@ -30,13 +30,7 @@ public class PreparedSQLRouter {
     
     private SQLParsedResult sqlParsedResult;
     
-    /**
-     * 使用参数进行SQL路由.
-     * 当第一次路由时进行SQL解析,之后的路由复用第一次的解析结果.
-     * 
-     * @param parameters SQL中的参数
-     * @return 路由结果
-     */
+    /* 使用参数进行SQL路由 当第一次路由时进行SQL解析,之后的路由复用第一次的解析结果 */
     public SQLRouteResult route(final List<Object> parameters) {
         if (null == sqlParsedResult) {
             sqlParsedResult = engine.parseSQL(logicSql, parameters);
@@ -48,4 +42,3 @@ public class PreparedSQLRouter {
         return engine.routeSQL(sqlParsedResult, parameters);
     }
 }
-

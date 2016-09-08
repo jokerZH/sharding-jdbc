@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser;
 
 import com.alibaba.druid.sql.ast.SQLStatement;
@@ -35,37 +34,27 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * 不包含OR语句的SQL构建器解析.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 不包含OR语句的SQL构建器解析 */
 @RequiredArgsConstructor
 @Slf4j
 public final class SQLParseEngine {
+    private final SQLStatement sqlStatement;    /* 逻辑sql语句 */
+    private final List<Object> parameters;      /* 参数 */
+    private final SQLASTOutputVisitor visitor;  /* 获得sql信息,修改sql语句 */
+    private final Collection<String> shardingColumns;   /* 当前逻辑db的分表字段集合 */
     
-    private final SQLStatement sqlStatement;
-    
-    private final List<Object> parameters;
-    
-    private final SQLASTOutputVisitor visitor;
-    
-    private final Collection<String> shardingColumns;
-    
-    /**
-     *  解析SQL.
-     * 
-     * @return SQL解析结果
-     */
+    /*  解析SQL */
     public SQLParsedResult parse() {
         Preconditions.checkArgument(visitor instanceof SQLVisitor);
+
         SQLVisitor sqlVisitor = (SQLVisitor) visitor;
         visitor.setParameters(parameters);
         sqlVisitor.getParseContext().setShardingColumns(shardingColumns);
         sqlStatement.accept(visitor);
+
         SQLParsedResult result = sqlVisitor.getParseContext().getParsedResult();
         if (sqlVisitor.getParseContext().isHasOrCondition()) {
+            // 如果有or操作 特么and呢
             new OrParser(sqlStatement, visitor).fillConditionContext(result);
         } 
         sqlVisitor.getParseContext().mergeCurrentConditionContext();

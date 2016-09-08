@@ -59,25 +59,37 @@ public final class SQLRouteEngine {
     
     /* 预解析SQL路由 */
     public PreparedSQLRouter/*预解析SQL路由器*/ prepareSQL(final String logicSql/*逻辑SQL*/) { return new PreparedSQLRouter(logicSql, this); }
-    
+
+    /* 解析sql语句 */
     SQLParsedResult parseSQL(final String logicSql, final List<Object> parameters) {
         Context context = MetricsContext.start("Parse SQL");
         SQLParsedResult result = SQLParserFactory.create(databaseType, logicSql, parameters, shardingRule.getAllShardingColumns()).parse();
         MetricsContext.stop(context);
         return result;
     }
-    
+
+    /* 路由的核心功能 */
     SQLRouteResult routeSQL(final SQLParsedResult parsedResult, final List<Object> parameters) {
         Context context = MetricsContext.start("Route SQL");
         SQLRouteResult result = new SQLRouteResult(parsedResult.getRouteContext().getSqlStatementType(), parsedResult.getMergeContext());
         for (ConditionContext each : parsedResult.getConditionContexts()) {
-            result.getExecutionUnits().addAll(routeSQL(each, Sets.newLinkedHashSet(Collections2.transform(parsedResult.getRouteContext().getTables(), new Function<Table, String>() {
-                
-                @Override
-                public String apply(final Table input) {
-                    return input.getName();
-                }
-            })), parsedResult.getRouteContext().getSqlBuilder(), parsedResult.getRouteContext().getSqlStatementType()));
+            result.getExecutionUnits().addAll(
+                    routeSQL(
+                            each,
+                            Sets.newLinkedHashSet(
+                                    Collections2.transform(
+                                            parsedResult.getRouteContext().getTables(),
+                                            new Function<Table, String>() {
+                                                @Override
+                                                public String apply(final Table input) {
+                                                    return input.getName();
+                                                }
+                                            }
+                                    )
+                            ),
+                            parsedResult.getRouteContext().getSqlBuilder(),
+                            parsedResult.getRouteContext().getSqlStatementType())
+            );
         }
         processLimit(result.getExecutionUnits(), parsedResult, parameters);
         MetricsContext.stop(context);
@@ -89,7 +101,12 @@ public final class SQLRouteEngine {
         return result;
     }
     
-    private Collection<SQLExecutionUnit> routeSQL(final ConditionContext conditionContext, final Set<String> logicTables, final SQLBuilder sqlBuilder, final SQLStatementType type) {
+    private Collection<SQLExecutionUnit> routeSQL(
+            final ConditionContext conditionContext,    /* 计算表达式 */
+            final Set<String> logicTables,              /* 逻辑表名 */
+            final SQLBuilder sqlBuilder,                /* sql语句创建器 */
+            final SQLStatementType type                 /* sql语句类型 */
+    ) {
         RoutingResult result;
         if (1 == logicTables.size()) {
             result = new SingleTableRouter(shardingRule, logicTables.iterator().next(), conditionContext, type).route();

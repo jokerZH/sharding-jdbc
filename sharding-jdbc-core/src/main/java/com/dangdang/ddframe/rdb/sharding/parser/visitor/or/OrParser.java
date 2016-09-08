@@ -23,11 +23,7 @@ import com.dangdang.ddframe.rdb.sharding.parser.result.SQLParsedResult;
 import com.dangdang.ddframe.rdb.sharding.parser.visitor.or.node.AbstractOrASTNode;
 import com.google.common.base.Optional;
 
-/**
- * OR表达式解析类.
- * 
- * @author gaohongtao
- */
+/* OR表达式解析类 */
 public final class OrParser {
     
     private final SQLStatement sqlStatement;

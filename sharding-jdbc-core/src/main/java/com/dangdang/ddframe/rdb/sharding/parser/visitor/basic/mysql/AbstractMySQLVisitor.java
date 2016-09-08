@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.parser.visitor.basic.mysql;
 
 import com.alibaba.druid.sql.ast.SQLHint;
@@ -38,15 +37,9 @@ import com.dangdang.ddframe.rdb.sharding.util.SQLUtil;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * MySQL解析基础访问器.
- * 
- * @author zhangliang
- */
+/* MySQL解析基础访问器, 通过便利sql对象, 构造parseConext, 主要处理表名,表的别名和 in = between的结构化 */
 public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements SQLVisitor {
-    
-    private ParseContext parseContext;
-    
+    private ParseContext parseContext;  /* 当前处理的解析对象 */
     private int parseContextIndex;
     
     protected AbstractMySQLVisitor() {
@@ -55,16 +48,7 @@ public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements
         parseContext = new ParseContext(parseContextIndex);
     }
     
-    @Override
-    public final DatabaseType getDatabaseType() {
-        return DatabaseType.MySQL;
-    }
-    
-    @Override
-    public final ParseContext getParseContext() {
-        return parseContext;
-    }
-    
+    /* 开始处理子查询 */
     protected final void stepInQuery() {
         if (0 == parseContextIndex) {
             parseContextIndex++;
@@ -76,46 +60,34 @@ public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements
         this.parseContext.getSubParseContext().add(parseContext);
         this.parseContext = parseContext;
     }
-    
+
+    /* 结束处理子查询 */
     protected final void stepOutQuery() {
         if (null == parseContext.getParentParseContext()) {
             return;
         }
         parseContext = parseContext.getParentParseContext();
     }
-    
+
+    /* TODO 父类使用<tt>@@</tt>代替<tt>?</tt>,此处直接输出参数占位符<tt>?</tt> */
     @Override
-    public final SQLBuilder getSQLBuilder() {
-        return (SQLBuilder) appender;
-    }
-    
-    @Override
-    public final void printToken(final String token) {
-        getSQLBuilder().appendToken(SQLUtil.getExactlyValue(token));
-    }
-    
-    /**
-     * 父类使用<tt>@@</tt>代替<tt>?</tt>,此处直接输出参数占位符<tt>?</tt>
-     * 
-     * @param x 变量表达式
-     * @return false 终止遍历AST
-     */
-    @Override
-    public final boolean visit(final SQLVariantRefExpr x) {
+    public final boolean visit(final SQLVariantRefExpr x/*变量表达式*/) {
         print(x.getName());
+        // false 终止遍历AST
         return false;
     }
-    
+
     @Override
-    public final boolean visit(final SQLExprTableSource x) {
+    public final boolean visit(final SQLExprTableSource x/*表名*/) {
         if ("dual".equalsIgnoreCase(SQLUtil.getExactlyValue(x.getExpr().toString()))) {
             return super.visit(x);
         }
         return visit(x, getParseContext().addTable(x));
     }
-    
+
+    /* 找到表名, 讲表名的位置改成token, 方便修改 */
     private boolean visit(final SQLExprTableSource x, final Table table) {
-        printToken(table.getName());
+        printToken(table.getName());    /* 方便后续修改表名 */
         if (table.getAlias().isPresent()) {
             print(' ');
             print(table.getAlias().get());
@@ -128,7 +100,7 @@ public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements
     }
     
     /**
-     * 将表名替换成占位符.
+     * 将表达式中表名替换成占位符.
      * 
      * <p>
      * 1. 如果二元表达式使用别名, 如: 
@@ -156,6 +128,8 @@ public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements
         if (getParseContext().isBinaryOperateWithAlias(x, tableOrAliasName)) {
             return super.visit(x);
         }
+
+        /* 打印xx.xxx */
         printToken(tableOrAliasName);
         print(".");
         print(x.getName());
@@ -191,4 +165,13 @@ public abstract class AbstractMySQLVisitor extends MySqlOutputVisitor implements
         parseContext.addCondition(x.getTestExpr(), BinaryOperator.BETWEEN, Arrays.asList(x.getBeginExpr(), x.getEndExpr()), getDatabaseType(), getParameters());
         return super.visit(x);
     }
+
+    @Override
+    public final DatabaseType getDatabaseType() { return DatabaseType.MySQL; }
+    @Override
+    public final ParseContext getParseContext() { return parseContext; }
+    @Override
+    public final SQLBuilder getSQLBuilder() { return (SQLBuilder) appender; }
+    @Override
+    public final void printToken(final String token) { getSQLBuilder().appendToken(SQLUtil.getExactlyValue(token)); }
 }

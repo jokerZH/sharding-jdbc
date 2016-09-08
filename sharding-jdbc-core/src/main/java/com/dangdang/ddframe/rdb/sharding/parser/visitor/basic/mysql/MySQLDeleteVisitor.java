@@ -20,12 +20,7 @@ package com.dangdang.ddframe.rdb.sharding.parser.visitor.basic.mysql;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlDeleteStatement;
 import com.google.common.base.Optional;
 
-/**
- * MySQL的DELETE语句访问器.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* MySQL的DELETE语句访问器 */
 public class MySQLDeleteVisitor extends AbstractMySQLVisitor {
     
     @Override

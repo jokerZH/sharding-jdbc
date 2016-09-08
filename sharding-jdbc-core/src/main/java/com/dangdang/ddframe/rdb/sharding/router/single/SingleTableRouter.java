@@ -43,24 +43,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 单逻辑表的库表路由.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 单逻辑表的库表路由 */
 @Slf4j
 public final class SingleTableRouter {
-    
-    private final ShardingRule shardingRule;
-    
-    private final String logicTable;
-    
-    private final ConditionContext conditionContext;
-    
-    private final TableRule tableRule;
-    
-    private final SQLStatementType sqlStatementType;
+    private final ShardingRule shardingRule;            /* 逻辑db */
+    private final String logicTable;                    /* 逻辑表名 */
+    private final ConditionContext conditionContext;    /* 计算表达式 */
+    private final TableRule tableRule;                  /* 单个逻辑表配置 */
+    private final SQLStatementType sqlStatementType;    /* sql类型 */
     
     public SingleTableRouter(final ShardingRule shardingRule, final String logicTable, final ConditionContext conditionContext, final SQLStatementType sqlStatementType) {
         this.shardingRule = shardingRule;
@@ -76,7 +66,8 @@ public final class SingleTableRouter {
             throw new IllegalArgumentException(String.format("Cannot find table rule and default data source with logic table: '%s'", logicTable));
         }
     }
-    
+
+    /* 发送到默认db */
     private TableRule createTableRuleWithDefaultDataSource(final String logicTable, final DataSourceRule defaultDataSourceRule) {
         Map<String, DataSource> defaultDataSourceMap = new HashMap<>(1);
         defaultDataSourceMap.put(defaultDataSourceRule.getDefaultDataSourceName(), defaultDataSourceRule.getDefaultDataSource().get());
@@ -86,17 +77,14 @@ public final class SingleTableRouter {
                 .tableShardingStrategy(new TableShardingStrategy("", new NoneTableShardingAlgorithm())).build();
     }
     
-    /**
-     * 路由.
-     * 
-     * @return 路由结果
-     */
+    /* 路由 */
     public SingleRoutingResult route() {
         Collection<String> routedDataSources = routeDataSources();
         Collection<String> routedTables = routeTables(routedDataSources);
         return generateRoutingResult(routedDataSources, routedTables);
     }
-    
+
+    /**/
     private Collection<String> routeDataSources() {
         DatabaseShardingStrategy strategy = shardingRule.getDatabaseShardingStrategy(tableRule);
         List<ShardingValue<?>> shardingValues;
