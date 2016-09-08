@@ -23,18 +23,14 @@ import java.sql.Statement;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.adapter.WrapperAdapter;
 
-/**
- * 声明不支持操作的静态语句对象.
- * 
- * @author gaohongtao
- */
+/* 声明不支持操作的静态语句对象 */
 public abstract class AbstractUnsupportedOperationStatement extends WrapperAdapter implements Statement {
     
     @Override
     public final int getFetchDirection() throws SQLException {
         throw new SQLFeatureNotSupportedException("getFetchDirection");
     }
-    
+
     @Override
     public final void setFetchDirection(final int direction) throws SQLException {
         throw new SQLFeatureNotSupportedException("setFetchDirection");

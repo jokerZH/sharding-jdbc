@@ -23,7 +23,7 @@ import com.dangdang.ddframe.rdb.sharding.router.SQLRouteEngine;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/* 数据源运行期上下文 */
+/* 数据源运行期上下文  */
 @RequiredArgsConstructor
 @Getter
 public final class ShardingContext {

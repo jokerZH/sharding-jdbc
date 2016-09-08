@@ -30,27 +30,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 支持读写分离的数据源.
- *
- * @author zhangliang
- */
+/* 支持读写分离的数据源 */
 @RequiredArgsConstructor
 public final class MasterSlaveDataSource extends AbstractDataSourceAdapter {
-    
+    // 请示发送到主
     private static final ThreadLocal<Boolean> DML_FLAG = new ThreadLocal<Boolean>() {
-        
         @Override
         protected Boolean initialValue() {
             return false;
         }
     };
     
-    private final String name;
-    
-    private final DataSource masterDataSource;
-    
-    private final List<DataSource> slaveDataSources;
+    private final String name;                          /* datasource name */
+    private final DataSource masterDataSource;          /* 主datasource */
+    private final List<DataSource> slaveDataSources;    /* 从datasource */
     
     private final SlaveLoadBalanceStrategy slaveLoadBalanceStrategy = new RoundRobinSlaveLoadBalanceStrategy();
     

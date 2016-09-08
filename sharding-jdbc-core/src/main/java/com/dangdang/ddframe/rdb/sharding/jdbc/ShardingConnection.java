@@ -37,27 +37,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 支持分片的数据库连接.
- * 
- * @author zhangliang
- * @author gaohongtao
- */
+/* 支持分片的数据库连接. */
 @RequiredArgsConstructor
 public final class ShardingConnection extends AbstractConnectionAdapter {
-    
     @Getter(AccessLevel.PACKAGE)
     private final ShardingContext shardingContext;
     
-    private final Map<String, Connection> connectionMap = new HashMap<>();
+    private final Map<String, Connection> connectionMap = new HashMap<>();  /* 使用到的物理db连接 */
     
-    /**
-     * 根据数据源名称获取相应的数据库连接.
-     * 
-     * @param dataSourceName 数据源名称
-     * @param sqlStatementType SQL语句类型
-     * @return 数据库连接
-     */
+    /* 根据数据源名称获取相应的数据库连接 */
     public Connection getConnection(final String dataSourceName, final SQLStatementType sqlStatementType) throws SQLException {
         Connection result = getConnectionInternal(dataSourceName, sqlStatementType);
         replayMethodsInvocation(result);
@@ -68,17 +56,21 @@ public final class ShardingConnection extends AbstractConnectionAdapter {
     public DatabaseMetaData getMetaData() throws SQLException {
         return getConnection(shardingContext.getShardingRule().getDataSourceRule().getDataSourceNames().iterator().next(), SQLStatementType.SELECT).getMetaData();
     }
-    
+
+    /* 获得物理连接 */
     private Connection getConnectionInternal(final String dataSourceName, final SQLStatementType sqlStatementType) throws SQLException {
         if (connectionMap.containsKey(dataSourceName)) {
             return connectionMap.get(dataSourceName);
         }
+
         Context metricsContext = MetricsContext.start(Joiner.on("-").join("ShardingConnection-getConnection", dataSourceName));
+
         DataSource dataSource = shardingContext.getShardingRule().getDataSourceRule().getDataSource(dataSourceName);
         if (dataSource instanceof MasterSlaveDataSource) {
             dataSource = ((MasterSlaveDataSource) dataSource).getDataSource(sqlStatementType);
         }
         Connection result = dataSource.getConnection();
+
         MetricsContext.stop(metricsContext);
         connectionMap.put(dataSourceName, result);
         return result;

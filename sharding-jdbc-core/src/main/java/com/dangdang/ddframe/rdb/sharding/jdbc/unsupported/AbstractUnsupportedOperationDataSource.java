@@ -24,11 +24,7 @@ import javax.sql.DataSource;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.adapter.WrapperAdapter;
 
-/**
- * 声明不支持操作的数据源对象.
- * 
- * @author zhangliang
- */
+/* 声明不支持操作的数据源对象 */
 public abstract class AbstractUnsupportedOperationDataSource extends WrapperAdapter implements DataSource {
     
     @Override

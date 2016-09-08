@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc.adapter;
 
 import com.dangdang.ddframe.rdb.sharding.exception.ShardingJdbcException;
@@ -25,14 +24,9 @@ import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * JDBC Wrapper适配类.
- * 
- * @author zhangliang
- */
+/* JDBC Wrapper适配类 */
 public class WrapperAdapter implements Wrapper {
-    
-    private final Collection<JdbcMethodInvocation> jdbcMethodInvocations = new ArrayList<>();
+    private final Collection<JdbcMethodInvocation> jdbcMethodInvocations = new ArrayList<>();   /* 分配Statement的时候都调用 */
     
     @SuppressWarnings("unchecked")
     @Override
@@ -48,14 +42,7 @@ public class WrapperAdapter implements Wrapper {
         return iface.isInstance(this);
     }
     
-    /**
-     * 记录方法调用.
-     * 
-     * @param targetClass 目标类
-     * @param methodName 方法名称
-     * @param argumentTypes 参数类型
-     * @param arguments 参数
-     */
+    /* 记录方法调用 */
     protected final void recordMethodInvocation(final Class<?> targetClass, final String methodName, final Class<?>[] argumentTypes, final Object[] arguments) {
         try {
             jdbcMethodInvocations.add(new JdbcMethodInvocation(targetClass.getMethod(methodName, argumentTypes), arguments));
@@ -64,11 +51,7 @@ public class WrapperAdapter implements Wrapper {
         }
     }
     
-    /**
-     * 回放记录的方法调用.
-     * 
-     * @param target 目标对象
-     */
+    /* 回放记录的方法调用 */
     protected final void replayMethodsInvocation(final Object target) {
         for (JdbcMethodInvocation each : jdbcMethodInvocations) {
             each.invoke(target);

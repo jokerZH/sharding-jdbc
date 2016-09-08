@@ -24,24 +24,14 @@ import com.dangdang.ddframe.rdb.sharding.exception.ShardingJdbcException;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * 反射调用JDBC相关方法的工具类.
- * 
- * @author gaohongtao
- */
+/* 反射调用JDBC相关方法的工具类 */
 @RequiredArgsConstructor
 public final class JdbcMethodInvocation {
+    private final Method method;        /* 函数名 */
+    private final Object[] arguments;   /* 参数 */
     
-    private final Method method;
-    
-    private final Object[] arguments;
-    
-    /**
-     *  调用方法.
-     * 
-     * @param target 目标对象
-     */
-    public void invoke(final Object target) {
+    /*  调用方法 */
+    public void invoke(final Object target/*目标对象*/) {
         try {
             method.invoke(target, arguments);
         } catch (final IllegalAccessException | InvocationTargetException ex) {

@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.router;
 
 import com.codahale.metrics.Timer.Context;
@@ -72,6 +71,7 @@ public final class SQLRouteEngine {
     SQLRouteResult routeSQL(final SQLParsedResult parsedResult, final List<Object> parameters) {
         Context context = MetricsContext.start("Route SQL");
         SQLRouteResult result = new SQLRouteResult(parsedResult.getRouteContext().getSqlStatementType(), parsedResult.getMergeContext());
+        // 获得执行单元
         for (ConditionContext each : parsedResult.getConditionContexts()) {
             result.getExecutionUnits().addAll(
                     routeSQL(
@@ -111,14 +111,17 @@ public final class SQLRouteEngine {
         if (1 == logicTables.size()) {
             result = new SingleTableRouter(shardingRule, logicTables.iterator().next(), conditionContext, type).route();
         } else if (shardingRule.isAllBindingTables(logicTables)) {
+            /* TODO */
             result = new BindingTablesRouter(shardingRule, logicTables, conditionContext, type).route();
         } else {
+            /* TODO */
             // TODO 可配置是否执行笛卡尔积
             result = new MixedTablesRouter(shardingRule, logicTables, conditionContext, type).route();
         }
         return result.getSQLExecutionUnits(sqlBuilder);
     }
-    
+
+    /* 处理limit的情况, 修改limit, 如果是单个sql就不变,如果是多个,则改成 0, offset+limit */
     private void processLimit(final Set<SQLExecutionUnit> sqlExecutionUnits, final SQLParsedResult parsedResult, final List<Object> parameters) {
         if (!parsedResult.getMergeContext().hasLimit()) {
             return;
@@ -133,6 +136,8 @@ public final class SQLRouteEngine {
             offset = limit.getOffset();
             rowCount = limit.getRowCount();
         }
+
+        // sql中写明的情况
         if (parsedResult.getRouteContext().getSqlBuilder().containsToken(Limit.OFFSET_NAME) || parsedResult.getRouteContext().getSqlBuilder().containsToken(Limit.COUNT_NAME)) {
             for (SQLExecutionUnit each : sqlExecutionUnits) {
                 SQLBuilder sqlBuilder = each.getSqlBuilder();
@@ -141,6 +146,8 @@ public final class SQLRouteEngine {
                 each.setSql(sqlBuilder.toSQL());
             }
         }
+
+        // ?的情况
         if (limit.getOffsetParameterIndex().isPresent()) {
             parameters.set(limit.getOffsetParameterIndex().get(), offset);
         }

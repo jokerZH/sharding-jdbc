@@ -84,7 +84,7 @@ public final class SingleTableRouter {
         return generateRoutingResult(routedDataSources, routedTables);
     }
 
-    /**/
+    /* 计算datasourceName Set */
     private Collection<String> routeDataSources() {
         DatabaseShardingStrategy strategy = shardingRule.getDatabaseShardingStrategy(tableRule);
         List<ShardingValue<?>> shardingValues;
@@ -99,8 +99,9 @@ public final class SingleTableRouter {
         Preconditions.checkState(!result.isEmpty(), "no database route info");
         return result;
     }
-    
-    private Collection<String> routeTables(final Collection<String> routedDataSources) {
+
+    /* 计算物理表名 */
+    private Collection<String> routeTables(final Collection<String> routedDataSources/*dataSource Name set*/) {
         TableShardingStrategy strategy = shardingRule.getTableShardingStrategy(tableRule);
         List<ShardingValue<?>> shardingValues;
         if (HintManagerHolder.isUseShardingHint()) {
@@ -119,7 +120,8 @@ public final class SingleTableRouter {
         Preconditions.checkState(!result.isEmpty(), "no table route info");
         return result;
     }
-    
+
+    /* 从hint中获得分表字段的值, 用于计算datasource */
     private List<ShardingValue<?>> getDatabaseShardingValuesFromHint(final Collection<String> shardingColumns) {
         List<ShardingValue<?>> result = new ArrayList<>(shardingColumns.size());
         for (String each : shardingColumns) {
@@ -130,7 +132,8 @@ public final class SingleTableRouter {
         }
         return result;
     }
-    
+
+    /* 从hint中获得分表字段的值,用于计算分表 */
     private List<ShardingValue<?>> getTableShardingValuesFromHint(final Collection<String> shardingColumns) {
         List<ShardingValue<?>> result = new ArrayList<>(shardingColumns.size());
         for (String each : shardingColumns) {
@@ -141,7 +144,8 @@ public final class SingleTableRouter {
         }
         return result;
     }
-    
+
+    /* 从计算表达式的解析结果中获得分表字段的值 */
     private List<ShardingValue<?>> getShardingValues(final Collection<String> shardingColumns) {
         List<ShardingValue<?>> result = new ArrayList<>(shardingColumns.size());
         for (String each : shardingColumns) {
@@ -160,7 +164,8 @@ public final class SingleTableRouter {
     private void logAfterRoute(final String type, final String logicTable, final Collection<String> shardingResults) {
         log.trace("After {} sharding {} result: {}", type, logicTable, shardingResults);
     }
-    
+
+    /* 根据获得的datasour和table名字集合 */
     private SingleRoutingResult generateRoutingResult(final Collection<String> routedDataSources, final Collection<String> routedTables) {
         SingleRoutingResult result = new SingleRoutingResult();
         for (DataNode each : tableRule.getActualDataNodes(routedDataSources, routedTables)) {

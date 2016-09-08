@@ -36,15 +36,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 多线程执行框架.
- * 
- * @author gaohongtao
- */
+/* 多线程执行框架, 多线程执行一批函数 */
 @Slf4j
 public final class ExecutorEngine {
-    
-    private final ListeningExecutorService executorService;
+    private final ListeningExecutorService executorService; /* 线程池 */
     
     public ExecutorEngine(final ShardingProperties shardingProperties) {
         int executorMinIdleSize = shardingProperties.getValue(ShardingPropertiesConstant.EXECUTOR_MIN_IDLE_SIZE);
@@ -54,16 +49,8 @@ public final class ExecutorEngine {
                 new ThreadPoolExecutor(executorMinIdleSize, executorMaxSize, executorMaxIdleTimeoutMilliseconds, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>())));
     }
     
-    /**
-     * 多线程执行任务.
-     * 
-     * @param inputs 输入参数
-     * @param executeUnit 执行单元
-     * @param <I> 入参类型
-     * @param <O> 出参类型
-     * @return 执行结果
-     */
-    public <I, O> List<O> execute(final Collection<I> inputs, final ExecuteUnit<I, O> executeUnit) {
+    /* 多线程执行任务 */
+    public <I/*入参类型*/, O/*出参类型*/> List<O>/*执行结果*/ execute(final Collection<I> inputs/*输入参数*/, final ExecuteUnit<I, O> executeUnit/*执行单元*/) {
         ListenableFuture<List<O>> futures = submitFutures(inputs, executeUnit);
         addCallback(futures);
         return getFutureResults(futures);
@@ -83,7 +70,8 @@ public final class ExecutorEngine {
     public <I, M, O> O execute(final Collection<I> inputs, final ExecuteUnit<I, M> executeUnit, final MergeUnit<M, O> mergeUnit) {
         return mergeUnit.merge(execute(inputs, executeUnit));
     }
-    
+
+    /* 多线程执行executeUnit */
     private <I, O> ListenableFuture<List<O>> submitFutures(final Collection<I> inputs, final ExecuteUnit<I, O> executeUnit) {
         Set<ListenableFuture<O>> result = new HashSet<>(inputs.size());
         for (final I each : inputs) {
@@ -97,7 +85,8 @@ public final class ExecutorEngine {
         }
         return Futures.allAsList(result);
     }
-    
+
+    /* 自动打日志 */
     private <T> void addCallback(final ListenableFuture<T> allFutures) {
         Futures.addCallback(allFutures, new FutureCallback<T>() {
             @Override
@@ -111,7 +100,8 @@ public final class ExecutorEngine {
             }
         });
     }
-    
+
+    /* 获得result */
     private <O> O getFutureResults(final ListenableFuture<O> futures) {
         try {
             return futures.get();

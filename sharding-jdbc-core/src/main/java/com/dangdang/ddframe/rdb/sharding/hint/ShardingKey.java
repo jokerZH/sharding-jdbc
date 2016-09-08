@@ -21,11 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 分片键.
- *
- * @author zhangliang
- */
+/* 分片键 */
 // TODO 重构到合适的包
 @RequiredArgsConstructor
 @EqualsAndHashCode

@@ -14,25 +14,13 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.api.strategy.slave;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-/**
- * 从库负载均衡策略.
- *
- * @author zhangliang
- */
+/* 从库负载均衡策略 */
 public interface SlaveLoadBalanceStrategy {
-    
-    /**
-     * 根据负载均衡策略获取从库数据源.
-     * 
-     * @param name 读写分离数据源名称
-     * @param slaveDataSources 从库数据源列表
-     * @return 选中的从库数据源
-     */
-    DataSource getDataSource(final String name, final List<DataSource> slaveDataSources);
+    /* 根据负载均衡策略获取从库数据源 */
+    DataSource/*选中的从库数据源*/ getDataSource(final String name/*读写分离数据源名称*/, final List<DataSource> slaveDataSources/*从库数据源列表*/);
 }

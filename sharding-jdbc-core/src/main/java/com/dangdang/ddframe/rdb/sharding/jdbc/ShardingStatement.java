@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc;
 
 import com.dangdang.ddframe.rdb.sharding.executor.StatementExecutor;
@@ -41,14 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 支持分片的静态语句对象.
- * 
- * @author gaohongtao
- * @author caohao
- */
+/* 支持分片的静态语句对象 */
 public class ShardingStatement extends AbstractStatementAdapter {
-    
     @Getter(AccessLevel.PROTECTED)
     private final ShardingConnection shardingConnection;
     

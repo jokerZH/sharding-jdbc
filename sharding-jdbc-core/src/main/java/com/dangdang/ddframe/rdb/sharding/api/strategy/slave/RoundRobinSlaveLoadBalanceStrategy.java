@@ -22,11 +22,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * 轮询负载均衡策略.
- *
- * @author zhangliang
- */
+/* 轮询负载均衡策略, 用于从之间的负载均衡 */
 public final class RoundRobinSlaveLoadBalanceStrategy implements SlaveLoadBalanceStrategy {
     
     private static final ConcurrentHashMap<String, AtomicInteger> COUNT_MAP = new ConcurrentHashMap<>();
