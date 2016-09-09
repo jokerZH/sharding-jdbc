@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger;
 
 import com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling.GroupByCouplingResultSet;
@@ -32,24 +31,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 分片结果集归并工厂.
- *
- * @author gaohongtao
- * @author zhangliang
- */
+/* 分片结果集归并工厂 */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class ResultSetFactory {
-    
-    /**
-     * 获取结果集.
-     *
-     * @param resultSets 结果集列表
-     * @param mergeContext 结果归并上下文
-     * @return 结果集包装
-     */
-    public static ResultSet getResultSet(final List<ResultSet> resultSets, final MergeContext mergeContext) throws SQLException {
+    /* 获取结果集, 考虑聚合运算 */
+    public static ResultSet/*结果集包装*/ getResultSet(final List<ResultSet> resultSets/*结果集列表*/, final MergeContext mergeContext/*结果归并上下文*/) throws SQLException {
         ShardingResultSets shardingResultSets = new ShardingResultSets(resultSets);
         log.debug("Sharding-JDBC: Sharding result sets type is '{}'", shardingResultSets.getType().toString());
         switch (shardingResultSets.getType()) {
@@ -71,7 +58,8 @@ public final class ResultSetFactory {
     private static ResultSet buildSingle(final ShardingResultSets shardingResultSets) throws SQLException {
         return shardingResultSets.getResultSets().get(0);
     }
-    
+
+    /* 多个resultSet的情况下 */
     private static ResultSet buildMultiple(final ShardingResultSets shardingResultSets, final MergeContext mergeContext) throws SQLException {
         ResultSetMergeContext resultSetMergeContext = new ResultSetMergeContext(shardingResultSets, mergeContext);
         return buildCoupling(buildReducer(resultSetMergeContext), resultSetMergeContext);

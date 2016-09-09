@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.adapter.AbstractResultSetAdapter;
@@ -33,18 +32,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 结果集归并上下文.
- *
- * @author zhangliang
- */
+/* 结果集归并上下文 */
 @Getter
 public final class ResultSetMergeContext {
-    
-    private final ShardingResultSets shardingResultSets;
-    
-    private final MergeContext mergeContext;
-    
+    private final ShardingResultSets shardingResultSets;    /* db反悔的resultSet */
+    private final MergeContext mergeContext;                /* 结果集合并过程 */
     private final List<OrderByColumn> currentOrderByKeys;
     
     public ResultSetMergeContext(final ShardingResultSets shardingResultSets, final MergeContext mergeContext) throws SQLException {
@@ -58,7 +50,8 @@ public final class ResultSetMergeContext {
         setColumnIndex(((AbstractResultSetAdapter) shardingResultSets.getResultSets().get(0)).getColumnLabelIndexMap());
         currentOrderByKeys.addAll(mergeContext.getOrderByColumns());
     }
-    
+
+    /* 设置结果及合并中表示字段的下标 */
     private void setColumnIndex(final Map<String, Integer> columnLabelIndexMap) {
         for (IndexColumn each : getAllFocusedColumns()) {
             if (each.getColumnIndex() > 0) {
@@ -73,7 +66,8 @@ public final class ResultSetMergeContext {
             }
         }
     }
-    
+
+    /* 找到需要care的字段的下标集合 */
     private List<IndexColumn> getAllFocusedColumns() {
         List<IndexColumn> result = new LinkedList<>();
         result.addAll(mergeContext.getGroupByColumns());

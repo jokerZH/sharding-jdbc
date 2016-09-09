@@ -43,35 +43,27 @@ import java.util.Map;
 /* 支持分片的静态语句对象 */
 public class ShardingStatement extends AbstractStatementAdapter {
     @Getter(AccessLevel.PROTECTED)
-    private final ShardingConnection shardingConnection;
+    private final ShardingConnection shardingConnection;    /* 指向父对象 */
     
     @Getter
-    private final int resultSetType;
-    
+    private final int resultSetType;            /* 单个或者有聚合运算操作 */
     @Getter
-    private final int resultSetConcurrency;
-    
+    private final int resultSetConcurrency;     /* commit时候是否提交 */
     @Getter
-    private final int resultSetHoldability;
-    
+    private final int resultSetHoldability;     /* 是否开启提交之后还保留resultset的能力 */
+
     @Getter(AccessLevel.PROTECTED)
-    private final Map<HashCode, Statement> cachedRoutedStatements = new HashMap<>();
+    private final Map<HashCode, Statement/*物理的statement*/> cachedRoutedStatements = new HashMap<>();    /* 当前执行过程涉及到的物理Statement*/
     
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)
-    private MergeContext mergeContext;
+    private MergeContext mergeContext;  /* 结果集合并 */
     
     @Setter(AccessLevel.PROTECTED)
-    private ResultSet currentResultSet;
+    private ResultSet currentResultSet; /* TODO */
     
-    public ShardingStatement(final ShardingConnection shardingConnection) {
-        this(shardingConnection, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
-    }
-    
-    public ShardingStatement(final ShardingConnection shardingConnection, final int resultSetType, final int resultSetConcurrency) {
-        this(shardingConnection, resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT);
-    }
-    
+    public ShardingStatement(final ShardingConnection shardingConnection) { this(shardingConnection, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT); }
+    public ShardingStatement(final ShardingConnection shardingConnection, final int resultSetType, final int resultSetConcurrency) { this(shardingConnection, resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT); }
     public ShardingStatement(final ShardingConnection shardingConnection, final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) {
         super(Statement.class);
         this.shardingConnection = shardingConnection;
@@ -79,12 +71,11 @@ public class ShardingStatement extends AbstractStatementAdapter {
         this.resultSetConcurrency = resultSetConcurrency;
         this.resultSetHoldability = resultSetHoldability;
     }
-    
+
     @Override
-    public Connection getConnection() throws SQLException {
-        return shardingConnection;
-    }
-    
+    public Connection getConnection() throws SQLException { return shardingConnection; }
+
+                /********  execute  *********/
     @Override
     public ResultSet executeQuery(final String sql) throws SQLException {
         if (null != currentResultSet && !currentResultSet.isClosed()) {
@@ -145,9 +136,10 @@ public class ShardingStatement extends AbstractStatementAdapter {
         }
         return result;
     }
-    
+
+    /* 获得Statement 经过缓存 */
     protected Statement getStatement(final Connection connection, final String sql) throws SQLException {
-        HashCode hashCode =  Hashing.md5().newHasher().putInt(connection.hashCode()).putString(sql, Charsets.UTF_8).hash();
+        HashCode hashCode =  Hashing.md5().newHasher().putInt(connection.hashCode()).putString(sql, Charsets.UTF_8).hash(); /* connection和sql唯一 */
         if (cachedRoutedStatements.containsKey(hashCode)) {
             return cachedRoutedStatements.get(hashCode);
         }
@@ -155,7 +147,8 @@ public class ShardingStatement extends AbstractStatementAdapter {
         cachedRoutedStatements.put(hashCode, statement);
         return statement;
     }
-    
+
+    /* 产生Statement */
     protected Statement generateStatement(final Connection connection, final String sql) throws SQLException {
         Statement result;
         if (0 == resultSetHoldability) {
@@ -184,7 +177,5 @@ public class ShardingStatement extends AbstractStatementAdapter {
     }
     
     @Override
-    public Collection<? extends Statement> getRoutedStatements() throws SQLException {
-        return cachedRoutedStatements.values();
-    }
+    public Collection<? extends Statement> getRoutedStatements() throws SQLException { return cachedRoutedStatements.values(); }
 }

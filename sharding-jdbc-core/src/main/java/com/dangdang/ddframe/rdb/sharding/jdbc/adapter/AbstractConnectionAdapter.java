@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc.adapter;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.unsupported.AbstractUnsupportedOperationConnection;
@@ -26,28 +25,25 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.Collection;
 
-/**
- * 数据库连接适配类.
- * 
- * @author zhangliang
- */
+/* 数据库连接适配类 */
 public abstract class AbstractConnectionAdapter extends AbstractUnsupportedOperationConnection {
-    
     private boolean autoCommit = true;
-    
     private boolean readOnly = true;
-    
     private boolean closed;
-    
     private int transactionIsolation = TRANSACTION_READ_UNCOMMITTED;
     
     protected abstract Collection<Connection> getConnections();
-    
+
+
     @Override
-    public final boolean getAutoCommit() throws SQLException {
-        return autoCommit;
+    public void close() throws SQLException {
+        for (Connection each : getConnections()) {
+            each.close();
+        }
+        closed = true;
+        MetricsContext.clear();
     }
-    
+
     @Override
     public final void setAutoCommit(final boolean autoCommit) throws SQLException {
         this.autoCommit = autoCommit;
@@ -59,40 +55,6 @@ public abstract class AbstractConnectionAdapter extends AbstractUnsupportedOpera
             each.setAutoCommit(autoCommit);
         }
     }
-    
-    @Override
-    public final void commit() throws SQLException {
-        for (Connection each : getConnections()) {
-            each.commit();
-        }
-    }
-    
-    @Override
-    public final void rollback() throws SQLException {
-        for (Connection each : getConnections()) {
-            each.rollback();
-        }
-    }
-    
-    @Override
-    public void close() throws SQLException {
-        for (Connection each : getConnections()) {
-            each.close();
-        }
-        closed = true;
-        MetricsContext.clear();
-    }
-    
-    @Override
-    public final boolean isClosed() throws SQLException {
-        return closed;
-    }
-    
-    @Override
-    public final boolean isReadOnly() throws SQLException {
-        return readOnly;
-    }
-    
     @Override
     public final void setReadOnly(final boolean readOnly) throws SQLException {
         this.readOnly = readOnly;
@@ -104,12 +66,6 @@ public abstract class AbstractConnectionAdapter extends AbstractUnsupportedOpera
             each.setReadOnly(readOnly);
         }
     }
-    
-    @Override
-    public final int getTransactionIsolation() throws SQLException {
-        return transactionIsolation;
-    }
-    
     @Override
     public final void setTransactionIsolation(final int level) throws SQLException {
         transactionIsolation = level;
@@ -123,22 +79,25 @@ public abstract class AbstractConnectionAdapter extends AbstractUnsupportedOpera
     }
     
     // -------以下代码与MySQL实现保持一致.-------
-    
+
     @Override
-    public SQLWarning getWarnings() throws SQLException {
-        return null;
-    }
-    
+    public final int getTransactionIsolation() throws SQLException { return transactionIsolation; }
     @Override
-    public void clearWarnings() throws SQLException {
-    }
-    
+    public final boolean getAutoCommit() throws SQLException { return autoCommit; }
     @Override
-    public final int getHoldability() throws SQLException {
-        return ResultSet.CLOSE_CURSORS_AT_COMMIT;
-    }
-    
+    public SQLWarning getWarnings() throws SQLException { return null; }
     @Override
-    public final void setHoldability(final int holdability) throws SQLException {
-    }
+    public void clearWarnings() throws SQLException { }
+    @Override
+    public final int getHoldability() throws SQLException { return ResultSet.CLOSE_CURSORS_AT_COMMIT; }
+    @Override
+    public final void setHoldability(final int holdability) throws SQLException { }
+    @Override
+    public final boolean isClosed() throws SQLException { return closed; }
+    @Override
+    public final boolean isReadOnly() throws SQLException { return readOnly; }
+    @Override
+    public final void commit() throws SQLException { for (Connection each : getConnections()) { each.commit(); } }
+    @Override
+    public final void rollback() throws SQLException { for (Connection each : getConnections()) { each.rollback(); } }
 }

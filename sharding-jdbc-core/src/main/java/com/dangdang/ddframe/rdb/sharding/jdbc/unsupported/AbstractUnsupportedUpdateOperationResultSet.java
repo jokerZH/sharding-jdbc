@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc.unsupported;
 
 import java.io.InputStream;
@@ -36,11 +35,7 @@ import java.sql.Timestamp;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.adapter.WrapperAdapter;
 
-/**
- * 声明不支持更新操作的数据结果集对象.
- * 
- * @author zhangliang
- */
+/* 声明不支持更新操作的数据结果集对象 */
 public abstract class AbstractUnsupportedUpdateOperationResultSet extends WrapperAdapter implements ResultSet {
     
     @Override

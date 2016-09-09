@@ -43,20 +43,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 代理结果集抽象类.
- * 
- * @author zhangliang
- */
+/* 代理结果集抽象类, 实现了resultSet的函数,但是没有实现next函数,应该用这个来决定逻辑resultSet内部数据的分布 */
 @Slf4j
 public abstract class AbstractDelegateResultSet extends AbstractResultSetAdapter {
-    
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)
-    private ResultSet delegate;
-    
-    private boolean beforeFirst = true;
-    
+    private ResultSet delegate;         /* 当前使用的result */
+    private boolean beforeFirst = true; /* 第一次执行next 下标还在第一个result之前 */
     private int offset;
     
     public AbstractDelegateResultSet(final List<ResultSet> resultSets) throws SQLException {
@@ -74,9 +67,8 @@ public abstract class AbstractDelegateResultSet extends AbstractResultSetAdapter
         }
         return result;
     }
-    
+
     protected abstract boolean firstNext() throws SQLException;
-    
     protected abstract boolean afterFirstNext() throws SQLException;
     
     @Override

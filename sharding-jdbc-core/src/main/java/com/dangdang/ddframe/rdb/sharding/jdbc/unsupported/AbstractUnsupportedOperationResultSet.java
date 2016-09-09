@@ -25,11 +25,7 @@ import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
-/**
- * 声明不支持操作的数据结果集对象.
- * 
- * @author zhangliang
- */
+/* 声明不支持操作的数据结果集对象. */
 public abstract class AbstractUnsupportedOperationResultSet extends AbstractUnsupportedUpdateOperationResultSet {
     
     @Override

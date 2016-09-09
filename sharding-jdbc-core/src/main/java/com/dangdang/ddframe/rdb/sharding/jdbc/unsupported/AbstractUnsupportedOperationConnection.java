@@ -35,11 +35,7 @@ import java.util.concurrent.Executor;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.adapter.WrapperAdapter;
 
-/**
- * 声明不支持操作的数据库连接对象.
- * 
- * @author zhangliang
- */
+/* 声明不支持操作的数据库连接对象 */
 public abstract class AbstractUnsupportedOperationConnection extends WrapperAdapter implements Connection {
     
     @Override

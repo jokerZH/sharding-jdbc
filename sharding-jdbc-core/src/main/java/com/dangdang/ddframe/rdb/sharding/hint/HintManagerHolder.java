@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/* 线索分片管理器的本地线程持有者 */
+/* 线索分片管理器的本地线程持有者, 保存hint相关的信息 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HintManagerHolder {
     private static final ThreadLocal<HintManager> HINT_MANAGER_HOLDER = new ThreadLocal<>();

@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc.adapter;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.unsupported.AbstractUnsupportedOperationResultSet;
@@ -30,20 +29,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 代理结果集适配器.
- * 
- * @author zhangliang
- */
+/* 代理结果集适配器 */
 @Slf4j
 public abstract class AbstractResultSetAdapter extends AbstractUnsupportedOperationResultSet {
-    
     @Getter(AccessLevel.PROTECTED)
-    private final List<ResultSet> resultSets;
-    
+    private final List<ResultSet> resultSets;   /* 物理resultSet */
     @Getter
-    private final Map<String, Integer> columnLabelIndexMap;
-
+    private final Map<String, Integer> columnLabelIndexMap; /* 从字段名到字段下标的映射关系 */
     private boolean closed;
     
     public AbstractResultSetAdapter(final List<ResultSet> resultSets) throws SQLException {
@@ -51,7 +43,8 @@ public abstract class AbstractResultSetAdapter extends AbstractUnsupportedOperat
         this.resultSets = resultSets;
         columnLabelIndexMap = generateColumnLabelIndexMap();
     }
-    
+
+    /* 根据resultSet生成从字段名到字段下标的映射关系 */
     private Map<String, Integer> generateColumnLabelIndexMap() throws SQLException {
         ResultSetMetaData resultSetMetaData = resultSets.get(0).getMetaData();
         Map<String, Integer> result = new CaseInsensitiveMap<>(resultSetMetaData.getColumnCount());
@@ -62,29 +55,11 @@ public abstract class AbstractResultSetAdapter extends AbstractUnsupportedOperat
     }
     
     @Override
-    public final void close() throws SQLException {
-        for (ResultSet each : resultSets) {
-            each.close();
-        }
-        closed = true;
-    }
-    
+    public final void close() throws SQLException { for (ResultSet each : resultSets) { each.close(); } closed = true; }
     @Override
-    public final boolean isClosed() throws SQLException {
-        return closed;
-    }
-    
+    public final boolean isClosed() throws SQLException { return closed; }
     @Override
-    public final void setFetchDirection(final int direction) throws SQLException {
-        for (ResultSet each : resultSets) {
-            each.setFetchDirection(direction);
-        }
-    }
-    
+    public final void setFetchDirection(final int direction) throws SQLException { for (ResultSet each : resultSets) { each.setFetchDirection(direction); } }
     @Override
-    public final void setFetchSize(final int rows) throws SQLException {
-        for (ResultSet each : resultSets) {
-            each.setFetchSize(rows);
-        }
-    }
+    public final void setFetchSize(final int rows) throws SQLException { for (ResultSet each : resultSets) { each.setFetchSize(rows); } }
 }

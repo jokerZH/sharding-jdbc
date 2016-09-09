@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.jdbc;
 
 import com.dangdang.ddframe.rdb.sharding.api.strategy.slave.RoundRobinSlaveLoadBalanceStrategy;
@@ -44,7 +43,6 @@ public final class MasterSlaveDataSource extends AbstractDataSourceAdapter {
     private final String name;                          /* datasource name */
     private final DataSource masterDataSource;          /* 主datasource */
     private final List<DataSource> slaveDataSources;    /* 从datasource */
-    
     private final SlaveLoadBalanceStrategy slaveLoadBalanceStrategy = new RoundRobinSlaveLoadBalanceStrategy();
     
     /**
@@ -55,36 +53,38 @@ public final class MasterSlaveDataSource extends AbstractDataSourceAdapter {
      */
     public DataSource getDataSource(final SQLStatementType sqlStatementType) {
         if (SQLStatementType.SELECT != sqlStatementType || DML_FLAG.get() || HintManagerHolder.isMasterRouteOnly()) {
+            // TODO 表名当前的就是master么
             DML_FLAG.set(true);
             return masterDataSource;
         }
         return slaveLoadBalanceStrategy.getDataSource(name, slaveDataSources);
     }
-    
+
+
+    /* 获得productName, 并检测master和slave的productName是否相同 */
     String getDatabaseProductName() throws SQLException {
         String result;
+
+        // 获得master的productName
         try (Connection masterConnection = masterDataSource.getConnection()) {
             result = masterConnection.getMetaData().getDatabaseProductName();
         }
+
         for (DataSource each : slaveDataSources) {
             String slaveDatabaseProductName;
             try (Connection slaveConnection = each.getConnection()) {
                 slaveDatabaseProductName = slaveConnection.getMetaData().getDatabaseProductName();    
             }
+
+            /* 检测master和slave的productName是否相同 */
             Preconditions.checkState(result.equals(slaveDatabaseProductName), String.format("Database type inconsistent with '%s' and '%s'", result, slaveDatabaseProductName));
         }
+
         return result;
     }
     
     @Override
-    public Connection getConnection() throws SQLException {
-        throw new UnsupportedOperationException("Master slave data source cannot support get connection directly.");
-    }
-    
-    /**
-     * 重置更新标记.
-     */
-    public static void resetDMLFlag() {
-        DML_FLAG.remove();
-    }
+    public Connection getConnection() throws SQLException { throw new UnsupportedOperationException("Master slave data source cannot support get connection directly."); }
+    /* 重置更新标记 */
+    public static void resetDMLFlag() { DML_FLAG.remove(); }
 }

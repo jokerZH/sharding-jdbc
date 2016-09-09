@@ -26,23 +26,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 分片结果集集合.
- *
- * @author zhangliang
- */
+/* 分片结果集集合 */
 @Getter
 public final class ShardingResultSets {
-    
-    private final List<ResultSet> resultSets;
-    
-    private final Type type;
+    private final List<ResultSet> resultSets;   /* mysql返回的resultSet */
+    private final Type type;    /* resultSet的个数 */
     
     public ShardingResultSets(final List<ResultSet> resultSets) throws SQLException {
         this.resultSets = filterResultSets(resultSets);
         type = generateType();
     }
-    
+
+    /* 给每一个resultSet封装了下 */
     private List<ResultSet> filterResultSets(final List<ResultSet> resultSets) throws SQLException {
         List<ResultSet> result = new ArrayList<>(resultSets.size());
         for (ResultSet each : resultSets) {
@@ -52,7 +47,9 @@ public final class ShardingResultSets {
         }
         return result;
     }
-    
+
+    /* 判断result是空 一个 多个 */
+    enum Type { EMPTY, SINGLE, MULTIPLE }
     private Type generateType() {
         if (this.resultSets.isEmpty()) {
             return Type.EMPTY;
@@ -62,25 +59,14 @@ public final class ShardingResultSets {
             return Type.MULTIPLE;
         }
     }
-    
-    enum Type {
-        EMPTY, SINGLE, MULTIPLE
-    }
-    
+
+    /* 数据分布和传入的数据分布一样 */
     private static final class WrapperResultSet extends AbstractDelegateResultSet {
-        
-        private WrapperResultSet(final ResultSet resultSetWhenNextOnce) throws SQLException {
-            super(Collections.singletonList(resultSetWhenNextOnce));
-        }
+        private WrapperResultSet(final ResultSet resultSetWhenNextOnce) throws SQLException { super(Collections.singletonList(resultSetWhenNextOnce)); }
+        @Override
+        protected boolean firstNext() throws SQLException { return true; }
         
         @Override
-        protected boolean firstNext() throws SQLException {
-            return true;
-        }
-        
-        @Override
-        protected boolean afterFirstNext() throws SQLException {
-            return getDelegate().next();
-        }
+        protected boolean afterFirstNext() throws SQLException { return getDelegate().next(); }
     }
 }

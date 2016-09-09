@@ -55,7 +55,8 @@ public class ShardingDataSource extends AbstractDataSourceAdapter {
             throw new ShardingJdbcException(ex);
         }
     }
-    
+
+    /* jdbc中提供的功能,活的product name */
     private String getDatabaseProductName(final ShardingRule shardingRule) throws SQLException {
         String result = null;
         for (DataSource each : shardingRule.getDataSourceRule().getDataSources()) {

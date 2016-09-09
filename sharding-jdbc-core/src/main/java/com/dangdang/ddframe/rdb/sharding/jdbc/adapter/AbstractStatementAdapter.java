@@ -65,7 +65,6 @@ public abstract class AbstractStatementAdapter extends AbstractUnsupportedOperat
     /* 获得执行结果后的所有jdbc的Statement */
     protected abstract Collection<? extends Statement> getRoutedStatements() throws SQLException;
 
-
     @Override
     public final void cancel() throws SQLException { for (Statement each : getRoutedStatements()) { each.cancel(); } }
     @Override
