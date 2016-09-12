@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.resultset.memory;
 
 import com.dangdang.ddframe.rdb.sharding.merger.resultset.memory.row.OrderByResultSetRow;
@@ -29,17 +28,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 基于内存排序的结果集抽象类.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 基于内存排序的结果集抽象类 */
 public abstract class AbstractMemoryOrderByResultSet extends AbstractMemoryResultSet {
-    
-    private final List<OrderByColumn> orderByColumns;
-    
-    private Iterator<OrderByResultSetRow> orderByResultSetRowIterator;
+    private final List<OrderByColumn> orderByColumns;   /* orderBy字段 */
+    private Iterator<OrderByResultSetRow> orderByResultSetRowIterator;  /**/
     
     public AbstractMemoryOrderByResultSet(final List<ResultSet> resultSets, final List<OrderByColumn> orderByColumns) throws SQLException {
         super(resultSets);
@@ -48,12 +40,15 @@ public abstract class AbstractMemoryOrderByResultSet extends AbstractMemoryResul
     
     @Override
     protected void initRows(final List<ResultSet> resultSets) throws SQLException {
+        // 将所有resultSet的第一行数据加入到orderByResultSetRowItertor中
         List<OrderByResultSetRow> orderByResultSetRows = new LinkedList<>();
         for (ResultSet each : resultSets) {
             while (each.next()) {
                 orderByResultSetRows.add(new OrderByResultSetRow(each, orderByColumns));
             }
         }
+
+        /* 排序 , FIXME这样只能排序一个行数据  */
         Collections.sort(orderByResultSetRows);
         orderByResultSetRowIterator = orderByResultSetRows.iterator();
     }

@@ -24,35 +24,20 @@ import com.google.common.base.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 执行上下文基类.
- * 
- * @author zhangliang
- */
+/* 执行上下文基类 */
 @RequiredArgsConstructor
 @Getter
 public abstract class AbstractExecutorWrapper {
-    
     private final SQLExecutionUnit sqlExecutionUnit;
     
-    /**
-     * 判断SQL是否为DML语句.
-     * 
-     * @return 是否为DML语句
-     */
+    /* 判断SQL是否为DML语句 */
     final boolean isDML() {
         String sql = sqlExecutionUnit.getSql();
         return sql.toLowerCase().startsWith("insert") || sql.toLowerCase().startsWith("update") || sql.toLowerCase().startsWith("delete");
     }
     
-    /**
-     * 判断SQL是否为DQL语句.
-     * 
-     * @return 是否为DQL语句
-     */
-    final boolean isDQL() {
-        return sqlExecutionUnit.getSql().toLowerCase().startsWith("select");
-    }
+    /* 判断SQL是否为DQL语句 */
+    final boolean isDQL() { return sqlExecutionUnit.getSql().toLowerCase().startsWith("select"); }
     
     /**
      * 获取DML类SQL执行时事件.

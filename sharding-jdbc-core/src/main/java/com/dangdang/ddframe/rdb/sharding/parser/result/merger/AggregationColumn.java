@@ -37,7 +37,7 @@ public final class AggregationColumn implements IndexColumn {
     private final Optional<String> alias;           /* 别名 */
     private final Optional<String> option;          /* 选项 */
     
-    private final List<AggregationColumn> derivedColumns = new ArrayList<>(2);  /* TODO */
+    private final List<AggregationColumn> derivedColumns = new ArrayList<>(2);  /* mysql执行的sql中,和当前聚合函数相关的字段名 */
     
     @Setter
     private int columnIndex = -1;   /* 字段的下标 */

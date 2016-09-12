@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling;
 
 import com.dangdang.ddframe.rdb.sharding.merger.resultset.delegate.AbstractDelegateResultSet;
@@ -25,16 +24,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 
-/**
- * 分页限制条件的连接结果集.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 分页限制条件的连接结果集 */
 public final class LimitCouplingResultSet extends AbstractDelegateResultSet {
-    
     private final Limit limit;
-    
     private int rowNumber;
     
     public LimitCouplingResultSet(final ResultSet resultSet, final MergeContext mergeContext) throws SQLException {
@@ -46,7 +38,8 @@ public final class LimitCouplingResultSet extends AbstractDelegateResultSet {
     protected boolean firstNext() throws SQLException {
         return skipOffset() && doNext();
     }
-    
+
+    /* 忽略前面的offset */
     private boolean skipOffset() throws SQLException {
         for (int i = 0; i < limit.getOffset(); i++) {
             if (!getDelegate().next()) {

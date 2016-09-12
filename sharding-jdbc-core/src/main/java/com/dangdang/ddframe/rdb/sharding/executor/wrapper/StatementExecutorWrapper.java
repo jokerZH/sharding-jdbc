@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.executor.wrapper;
 
 import com.dangdang.ddframe.rdb.sharding.executor.event.DMLExecutionEvent;
@@ -25,18 +24,11 @@ import lombok.Getter;
 
 import java.sql.Statement;
 
-/**
- * 静态语句对象的执行上下文.
- * 
- * @author zhangliang
- */
+/* 静态语句对象的执行上下文 */
 public final class StatementExecutorWrapper extends AbstractExecutorWrapper {
-    
     @Getter
-    private final Statement statement;
-    
+    private final Statement statement;  /* 所属statement TODO 逻辑的还是物理的 */
     private final Optional<DMLExecutionEvent> dmlExecutionEvent;
-    
     private final Optional<DQLExecutionEvent> dqlExecutionEvent;
     
     public StatementExecutorWrapper(final Statement statement, final SQLExecutionUnit sqlExecutionUnit) {
@@ -55,12 +47,7 @@ public final class StatementExecutorWrapper extends AbstractExecutorWrapper {
     }
     
     @Override
-    public Optional<DMLExecutionEvent> getDMLExecutionEvent() {
-        return dmlExecutionEvent;
-    }
-    
+    public Optional<DMLExecutionEvent> getDMLExecutionEvent() { return dmlExecutionEvent; }
     @Override
-    public Optional<DQLExecutionEvent> getDQLExecutionEvent() {
-        return dqlExecutionEvent;
-    }
+    public Optional<DQLExecutionEvent> getDQLExecutionEvent() { return dqlExecutionEvent; }
 }

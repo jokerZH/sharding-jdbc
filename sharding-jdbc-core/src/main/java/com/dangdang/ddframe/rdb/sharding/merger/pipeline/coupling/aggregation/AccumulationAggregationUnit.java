@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling.aggregation;
 
 import lombok.RequiredArgsConstructor;
@@ -23,15 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * 累加聚合单元.
- * 
- * @author zhangliang
- */
+/* 累加聚合单元 */
 @RequiredArgsConstructor
 @Slf4j
 public final class AccumulationAggregationUnit implements AggregationUnit {
-    
     private BigDecimal result;
     
     @Override

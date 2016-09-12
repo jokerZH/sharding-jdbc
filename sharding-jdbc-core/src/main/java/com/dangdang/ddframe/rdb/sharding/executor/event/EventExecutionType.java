@@ -19,26 +19,15 @@ package com.dangdang.ddframe.rdb.sharding.executor.event;
 
 import lombok.Getter;
 
-/**
- * 事件触发类型.
- * 
- * @author zhangliang
- */
+/* 事件触发类型 */
 @Getter
 public enum EventExecutionType {
-    
-    /**
-     * 执行前.
-     */
+    /* 执行前 */
     BEFORE_EXECUTE, 
     
-    /**
-     * 执行成功.
-     */
+    /* 执行成功 */
     EXECUTE_SUCCESS, 
     
-    /**
-     * 执行失败.
-     */
+    /* 执行失败 */
     EXECUTE_FAILURE
 }

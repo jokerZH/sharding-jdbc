@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.pipeline.reducer;
 
 import com.dangdang.ddframe.rdb.sharding.merger.ResultSetMergeContext;
@@ -22,14 +21,8 @@ import com.dangdang.ddframe.rdb.sharding.merger.resultset.memory.AbstractMemoryO
 
 import java.sql.SQLException;
 
-/**
- * 根据排序列内存排序的聚集结果集.
- *
- * @author gaohongtao
- * @author zhangliang
- */
+/* 根据排序列内存排序的聚集结果集 */
 public final class MemoryOrderByReducerResultSet extends AbstractMemoryOrderByResultSet {
-    
     public MemoryOrderByReducerResultSet(final ResultSetMergeContext resultSetMergeContext) throws SQLException {
         super(resultSetMergeContext.getShardingResultSets().getResultSets(), resultSetMergeContext.getCurrentOrderByKeys());
     }

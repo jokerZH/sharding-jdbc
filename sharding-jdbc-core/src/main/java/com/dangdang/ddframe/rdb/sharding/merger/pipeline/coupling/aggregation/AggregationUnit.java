@@ -19,11 +19,7 @@ package com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling.aggregation;
 
 import java.util.List;
 
-/**
- * 归并计算单元接口.
- * 
- * @author gaohongtao
- */
+/* 归并计算单元接口 */
 public interface AggregationUnit {
     
     /**

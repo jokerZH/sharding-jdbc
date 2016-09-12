@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.resultset.memory.row;
 
 import com.google.common.base.Preconditions;
@@ -23,20 +22,15 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-/**
- * 结果集数据行抽象类.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 结果集数据行抽象类 一行数据 */
 public abstract class AbstractResultSetRow implements ResultSetRow {
-    
-    private final Object[] rowData;
+    private final Object[] rowData; /* 各个字段的数据 */
     
     public AbstractResultSetRow(final ResultSet resultSet) throws SQLException {
         rowData = loadData(resultSet);
     }
-    
+
+    /* 读取resultSet中一行的数据 */
     private Object[] loadData(final ResultSet resultSet) throws SQLException {
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         Object[] result = new Object[resultSetMetaData.getColumnCount()];

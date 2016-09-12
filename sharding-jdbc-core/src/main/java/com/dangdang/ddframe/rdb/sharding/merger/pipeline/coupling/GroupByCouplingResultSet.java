@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling;
 
 import com.dangdang.ddframe.rdb.sharding.merger.ResultSetMergeContext;
@@ -30,20 +29,13 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 分组的连接结果集.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 分组的连接结果集 groupBy + 聚合函数 */
 public final class GroupByCouplingResultSet extends AbstractMemoryResultSet {
-    
     private final List<GroupByColumn> groupByColumns;
-    
     private final List<AggregationColumn> aggregationColumns;
     
-    private ResultSet resultSet;
-    
+    private ResultSet resultSet;    /* resultSet就一个 */
+
     private boolean hasNext;
     
     public GroupByCouplingResultSet(final ResultSet resultSet, final ResultSetMergeContext resultSetMergeContext) throws SQLException {
@@ -57,12 +49,15 @@ public final class GroupByCouplingResultSet extends AbstractMemoryResultSet {
         resultSet = resultSets.get(0);
         hasNext = resultSet.next();
     }
-    
+
+    /* FIXME what's the fuck */
     @Override
     protected Optional<? extends ResultSetRow> nextRow() throws SQLException {
         if (!hasNext) {
             return Optional.absent();
         }
+
+        // 处理一个分组的所有数据对应聚合函数相关的操作 跨过同组的分组字段相同的row FIXME 会有问题吧
         GroupByResultSetRow result = new GroupByResultSetRow(resultSet, groupByColumns, aggregationColumns);
         List<Object> groupByValues = result.getGroupByValues();
         while (hasNext && (groupByColumns.isEmpty() || groupByValues.equals(result.getGroupByValues()))) {

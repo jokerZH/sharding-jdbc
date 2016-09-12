@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.resultset.memory.row;
 
 import com.dangdang.ddframe.rdb.sharding.merger.pipeline.coupling.aggregation.AggregationUnit;
@@ -32,19 +31,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 具有分组功能的数据行对象.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 具有分组功能的数据行对象 */
 public final class GroupByResultSetRow extends AbstractResultSetRow {
-    
     private final ResultSet resultSet;
-    
-    private final List<GroupByColumn> groupByColumns;
-    
-    private final Map<AggregationColumn, AggregationUnit> aggregationUnitMap;
+    private final List<GroupByColumn> groupByColumns;   /* group by */
+    private final Map<AggregationColumn, AggregationUnit> aggregationUnitMap;   /* 聚合函数到对应的计算单元的映射关系 */
     
     public GroupByResultSetRow(final ResultSet resultSet, final List<GroupByColumn> groupByColumns, final List<AggregationColumn> aggregationColumns) throws SQLException {
         super(resultSet);
@@ -59,17 +50,14 @@ public final class GroupByResultSetRow extends AbstractResultSetRow {
         });
     }
     
-    /**
-     * 处理聚合函数结果集.
-     * 
-     * @throws SQLException SQL异常
-     */
+    /* 处理聚合函数结果集, 结果存放在AggregationUnit中 */
     public void aggregate() throws SQLException {
         for (Map.Entry<AggregationColumn, AggregationUnit> each : aggregationUnitMap.entrySet()) {
             each.getValue().merge(getAggregationValues(each.getKey().getDerivedColumns().isEmpty() ? Collections.singletonList(each.getKey()) : each.getKey().getDerivedColumns()));
         }
     }
-    
+
+    /* 获得聚合计算对应的值得 */
     private List<Comparable<?>> getAggregationValues(final List<AggregationColumn> aggregationColumns) throws SQLException {
         List<Comparable<?>> result = new ArrayList<>(aggregationColumns.size());
         for (AggregationColumn each : aggregationColumns) {
@@ -78,21 +66,14 @@ public final class GroupByResultSetRow extends AbstractResultSetRow {
         return result;
     }
     
-    /**
-     * 生成结果.
-     */
+    /* 生成结果, 设置result中对应的值 */
     public void generateResult() {
         for (AggregationColumn each : aggregationUnitMap.keySet()) {
             setCell(each.getColumnIndex(), aggregationUnitMap.get(each).getResult());
         }
     }
     
-    /**
-     * 获取分组值.
-     * 
-     * @return 分组值集合
-     * @throws SQLException SQL异常
-     */
+    /* 获取分组值 和groupby相关的字段的值 */
     public List<Object> getGroupByValues() throws SQLException {
         List<Object> result = new ArrayList<>(groupByColumns.size());
         for (GroupByColumn each : groupByColumns) {

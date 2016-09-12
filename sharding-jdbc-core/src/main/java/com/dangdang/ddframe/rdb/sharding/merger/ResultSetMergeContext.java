@@ -37,7 +37,7 @@ import java.util.Map;
 public final class ResultSetMergeContext {
     private final ShardingResultSets shardingResultSets;    /* db反悔的resultSet */
     private final MergeContext mergeContext;                /* 结果集合并过程 */
-    private final List<OrderByColumn> currentOrderByKeys;
+    private final List<OrderByColumn> currentOrderByKeys;   /* 排序需要依据的字段名 */
     
     public ResultSetMergeContext(final ShardingResultSets shardingResultSets, final MergeContext mergeContext) throws SQLException {
         this.shardingResultSets = shardingResultSets;
@@ -82,24 +82,8 @@ public final class ResultSetMergeContext {
         }
         return result;
     }
-    
-    /**
-     * 判断分组归并是否需要内存排序.
-     *
-     * @return 分组归并是否需要内存排序
-     */
-    public boolean isNeedMemorySortForGroupBy() {
-        return mergeContext.hasGroupBy() && !currentOrderByKeys.equals(transformGroupByColumnsToOrderByColumns());
-    }
-    
-    /**
-     * 将分组顺序设置为排序序列.
-     */
-    public void setGroupByKeysToCurrentOrderByKeys() {
-        currentOrderByKeys.clear();
-        currentOrderByKeys.addAll(transformGroupByColumnsToOrderByColumns());
-    }
-    
+
+    /* 根据groupby生成order by */
     private List<OrderByColumn> transformGroupByColumnsToOrderByColumns() {
         return Lists.transform(mergeContext.getGroupByColumns(), new Function<GroupByColumn, OrderByColumn>() {
             
@@ -111,19 +95,29 @@ public final class ResultSetMergeContext {
             }
         });
     }
-    
-    /**
-     * 判断排序归并是否需要内存排序.
-     *
-     * @return 排序归并是否需要内存排序
-     */
+
+
+
+    /* 判断分组归并是否需要内存排序 */
+    public boolean isNeedMemorySortForGroupBy() {
+        /* 如果有groupby 并且 并且groupby的字段和orderby的字段不一样 */
+        return mergeContext.hasGroupBy() && !currentOrderByKeys.equals(transformGroupByColumnsToOrderByColumns());
+    }
+
+    /* 判断排序归并是否需要内存排序 */
     public boolean isNeedMemorySortForOrderBy() {
         return mergeContext.hasOrderBy() && !currentOrderByKeys.equals(mergeContext.getOrderByColumns());
     }
-    
-    /**
-     * 将排序顺序设置为排序序列.
-     */
+
+
+
+    /* 将分组顺序设置为排序序列 */
+    public void setGroupByKeysToCurrentOrderByKeys() {
+        currentOrderByKeys.clear();
+        currentOrderByKeys.addAll(transformGroupByColumnsToOrderByColumns());
+    }
+
+    /* 将排序顺序设置为排序序列 */
     public void setOrderByKeysToCurrentOrderByKeys() {
         currentOrderByKeys.clear();
         currentOrderByKeys.addAll(mergeContext.getOrderByColumns());

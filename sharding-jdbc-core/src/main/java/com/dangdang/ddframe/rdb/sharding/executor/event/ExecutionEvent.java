@@ -26,20 +26,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * SQL执行时事件.
- *
- * @author gaohongtao
- */
+/* SQL执行时事件, 后端db执行的一次sql对应的对象 */
 @Getter
 public class ExecutionEvent {
-    
     private final String id;
-    
     private final String dataSource;
-    
     private final String sql;
-    
     private final List<Object> parameters;
     
     @Setter
@@ -48,10 +40,7 @@ public class ExecutionEvent {
     @Setter
     private Optional<SQLException> exp;
     
-    ExecutionEvent(final String dataSource, final String sql) {
-        this(dataSource, sql, Collections.emptyList());
-    }
-    
+    ExecutionEvent(final String dataSource, final String sql) { this(dataSource, sql, Collections.emptyList()); }
     ExecutionEvent(final String dataSource, final String sql, final List<Object> parameters) {
         // TODO 替换UUID为更有效率的id生成器
         id = UUID.randomUUID().toString();

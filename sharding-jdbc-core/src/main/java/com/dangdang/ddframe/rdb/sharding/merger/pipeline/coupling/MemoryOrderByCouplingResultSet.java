@@ -24,14 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 
-/**
- * 根据排序列内存排序的连接结果集.
- *
- * @author gaohongtao
- * @author zhangliang
- */
+/* 根据排序列内存排序的连接结果集 */
 public final class MemoryOrderByCouplingResultSet extends AbstractMemoryOrderByResultSet {
-    
     public MemoryOrderByCouplingResultSet(final ResultSet resultSet, final ResultSetMergeContext resultSetMergeContext) throws SQLException {
         super(Collections.singletonList(resultSet), resultSetMergeContext.getCurrentOrderByKeys());
     }

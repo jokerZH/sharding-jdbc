@@ -64,7 +64,8 @@ public final class ResultSetFactory {
         ResultSetMergeContext resultSetMergeContext = new ResultSetMergeContext(shardingResultSets, mergeContext);
         return buildCoupling(buildReducer(resultSetMergeContext), resultSetMergeContext);
     }
-    
+
+    /* 处理多个resultSet的情况,根据orderBy和groupBy返回对应的结果, 返回对应的resultSet对象 */
     private static ResultSet buildReducer(final ResultSetMergeContext resultSetMergeContext) throws SQLException {
         if (resultSetMergeContext.isNeedMemorySortForGroupBy()) {
             resultSetMergeContext.setGroupByKeysToCurrentOrderByKeys();
@@ -75,19 +76,23 @@ public final class ResultSetFactory {
         }
         return new IteratorReducerResultSet(resultSetMergeContext);
     }
-    
+
+    /* 在处理排序的基础上, 处理聚合函数 */
     private static ResultSet buildCoupling(final ResultSet resultSet, final ResultSetMergeContext resultSetMergeContext) throws SQLException {
         ResultSet result = resultSet;
         if (resultSetMergeContext.getMergeContext().hasGroupByOrAggregation()) {
             result = new GroupByCouplingResultSet(result, resultSetMergeContext);
         }
+
         if (resultSetMergeContext.isNeedMemorySortForOrderBy()) {
             resultSetMergeContext.setOrderByKeysToCurrentOrderByKeys();
             result = new MemoryOrderByCouplingResultSet(result, resultSetMergeContext);
         }
+
         if (resultSetMergeContext.getMergeContext().hasLimit()) {
             result = new LimitCouplingResultSet(result, resultSetMergeContext.getMergeContext());
         }
+
         return result;
     }
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.executor;
 
 import com.codahale.metrics.Timer.Context;
@@ -37,18 +36,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 多线程执行静态语句对象请求的执行器.
- * 
- * @author gaohongtao
- * @author caohao
- */
+/* 多线程执行静态语句对象请求的执行器 */
 @RequiredArgsConstructor
 public final class StatementExecutor {
+    private final ExecutorEngine executorEngine;    /* 多线程处理器 */
     
-    private final ExecutorEngine executorEngine;
-    
-    private final Collection<StatementExecutorWrapper> statementExecutorWrappers = new ArrayList<>();
+    private final Collection<StatementExecutorWrapper> statementExecutorWrappers = new ArrayList<>();   /* 对应mysql物理后端执行单元 */
     
     /**
      * 添加静态语句对象至执行上下文.

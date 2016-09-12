@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.util;
 
 import com.dangdang.ddframe.rdb.sharding.exception.ShardingJdbcException;
@@ -27,11 +26,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * 结果集工具类.
- * 
- * @author gaohongtao
- */
+/* 结果集工具类 */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResultSetUtil {
     
@@ -121,16 +116,9 @@ public final class ResultSetUtil {
         }
     }
     
-    /**
-     * 根据排序类型比较大小.
-     * 
-     * @param thisValue 待比较的值
-     * @param otherValue 待比较的值
-     * @param orderByType 排序类型
-     * @return 负数，零和正数分别表示小于，等于和大于
-     */
+    /* 根据排序类型比较大小 */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static int compareTo(final Comparable thisValue, final Comparable otherValue, final OrderByType orderByType) {
+    public static int/*负数，零和正数分别表示小于，等于和大于*/ compareTo(final Comparable thisValue/*待比较的值*/, final Comparable otherValue/*待比较的值*/, final OrderByType orderByType/*排序类型*/) {
         return OrderByType.ASC == orderByType ? thisValue.compareTo(otherValue) : -thisValue.compareTo(otherValue);
     }
 }

@@ -26,16 +26,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 具有排序功能的数据行对象.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 具有排序功能的数据行对象 */
 public final class OrderByResultSetRow extends AbstractResultSetRow implements Comparable<OrderByResultSetRow> {
-    
     private final List<OrderByColumn> orderByColumns;
-    
     private final List<Comparable<?>> orderByValues;
     
     public OrderByResultSetRow(final ResultSet resultSet, final List<OrderByColumn> orderByColumns) throws SQLException {
@@ -43,7 +36,8 @@ public final class OrderByResultSetRow extends AbstractResultSetRow implements C
         this.orderByColumns = orderByColumns;
         orderByValues = loadOrderByValues();
     }
-    
+
+    /* 讲排序相关的值加入到orderByValues */
     private List<Comparable<?>> loadOrderByValues() {
         List<Comparable<?>> result = new ArrayList<>(orderByColumns.size());
         for (OrderByColumn each : orderByColumns) {

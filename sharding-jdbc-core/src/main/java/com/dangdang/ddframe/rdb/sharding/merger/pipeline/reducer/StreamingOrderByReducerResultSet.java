@@ -28,16 +28,10 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 流式排序的聚集结果集.
- *
- * @author gaohongtao
- * @author zhangliang
- */
+/* 流式排序的聚集结果集 next的时候比对那个resultSet是需要返回结果的 */
 @Slf4j
 public final class StreamingOrderByReducerResultSet extends AbstractDelegateResultSet {
-    
-    private final List<OrderByColumn> orderByColumns;
+    private final List<OrderByColumn> orderByColumns;   /* 排序的依据 */
     
     private final List<ResultSet> resultSets = new LinkedList<>();
     
@@ -71,7 +65,8 @@ public final class StreamingOrderByReducerResultSet extends AbstractDelegateResu
         setDelegateResultSet();
         return !resultSets.isEmpty();
     }
-    
+
+    /* 选出值最大的那个Row,然后设置对一个你的result为当前的result,这样每次都要全部扫一遍 ,可以用堆排序啥的 */
     private void setDelegateResultSet() throws SQLException {
         OrderByResultSetRow chosenOrderByValue = null;
         for (ResultSet each : resultSets) {

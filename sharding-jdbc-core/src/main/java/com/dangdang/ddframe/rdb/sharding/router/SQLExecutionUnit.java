@@ -24,7 +24,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-/* SQL最小执行单元 */
+/* SQL最小执行单元  分表结果 */
 @Getter
 @Slf4j
 @ToString

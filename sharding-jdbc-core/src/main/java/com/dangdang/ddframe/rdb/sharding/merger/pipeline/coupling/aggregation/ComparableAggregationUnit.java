@@ -22,11 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-/**
- * 比较聚合单元.
- * 
- * @author gaohongtao
- */
+/* 比较聚合单元 */
 @RequiredArgsConstructor
 @Slf4j
 public final class ComparableAggregationUnit implements AggregationUnit {
@@ -34,7 +30,8 @@ public final class ComparableAggregationUnit implements AggregationUnit {
     private final boolean asc;
     
     private Comparable<?> result;
-    
+
+    /* 假设是values中只有一个值, 或者已经排好序了 */
     @SuppressWarnings("unchecked")
     @Override
     public void merge(final List<Comparable<?>> values) {

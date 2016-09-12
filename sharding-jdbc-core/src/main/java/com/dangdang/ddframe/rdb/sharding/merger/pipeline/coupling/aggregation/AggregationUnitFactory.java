@@ -21,11 +21,7 @@ import com.dangdang.ddframe.rdb.sharding.parser.result.merger.AggregationColumn.
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 聚合函数结果集归并单元工厂.
- * 
- * @author gaohongtao
- */
+/* 聚合函数结果集归并单元工厂 */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AggregationUnitFactory {
     

@@ -26,7 +26,7 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 public abstract class AbstractSortableColumn {
-    private final Optional<String> owner;   /* TODO 表名 */
+    private final Optional<String> owner;   /* 表名 */
     private final Optional<String> name;    /* 字段名 */
     private final Optional<String> alias;   /* 别名 */
     

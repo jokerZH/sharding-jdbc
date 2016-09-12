@@ -60,7 +60,7 @@ public class ShardingStatement extends AbstractStatementAdapter {
     private MergeContext mergeContext;  /* 结果集合并 */
     
     @Setter(AccessLevel.PROTECTED)
-    private ResultSet currentResultSet; /* TODO */
+    private ResultSet currentResultSet; /* 逻辑的resultSet */
     
     public ShardingStatement(final ShardingConnection shardingConnection) { this(shardingConnection, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT); }
     public ShardingStatement(final ShardingConnection shardingConnection, final int resultSetType, final int resultSetConcurrency) { this(shardingConnection, resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT); }
@@ -75,7 +75,10 @@ public class ShardingStatement extends AbstractStatementAdapter {
     @Override
     public Connection getConnection() throws SQLException { return shardingConnection; }
 
-                /********  execute  *********/
+
+
+                        /********  execute  *********/
+    /* 单独处理resultSet的情况 */
     @Override
     public ResultSet executeQuery(final String sql) throws SQLException {
         if (null != currentResultSet && !currentResultSet.isClosed()) {
@@ -124,7 +127,8 @@ public class ShardingStatement extends AbstractStatementAdapter {
     public boolean execute(final String sql, final String[] columnNames) throws SQLException {
         return generateExecutor(sql).execute(columnNames);
     }
-    
+
+    /* 执行sql的过程 */
     private StatementExecutor generateExecutor(final String sql) throws SQLException {
         StatementExecutor result = new StatementExecutor(shardingConnection.getShardingContext().getExecutorEngine());
         SQLRouteResult sqlRouteResult = shardingConnection.getShardingContext().getSqlRouteEngine().route(sql);
@@ -158,7 +162,8 @@ public class ShardingStatement extends AbstractStatementAdapter {
         }
         return result;
     }
-    
+
+    /* 获得当前的逻辑resultSet */
     @Override
     public ResultSet getResultSet() throws SQLException {
         if (null != currentResultSet) {

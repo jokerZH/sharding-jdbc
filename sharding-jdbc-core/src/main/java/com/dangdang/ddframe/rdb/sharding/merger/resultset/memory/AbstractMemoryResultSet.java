@@ -41,15 +41,9 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * 内存结果集抽象类.
- * 
- * @author gaohongtao
- * @author zhangliang
- */
+/* 内存结果集抽象类 */
 @Slf4j
 public abstract class AbstractMemoryResultSet extends AbstractUnsupportedOperationMemoryResultSet {
-    
     private boolean beforeFirst = true;
     
     @Getter(AccessLevel.PROTECTED)
@@ -76,7 +70,8 @@ public abstract class AbstractMemoryResultSet extends AbstractUnsupportedOperati
         }
         return false;
     }
-    
+
+    /* 初始化整个resultSet */
     protected abstract void initRows(final List<ResultSet> resultSets) throws SQLException;
     
     protected abstract Optional<? extends ResultSetRow> nextRow() throws SQLException;

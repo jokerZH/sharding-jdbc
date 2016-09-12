@@ -14,16 +14,9 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.merger.resultset.memory.row;
 
-/**
- * 结果集数据行接口.
- * 
- * <p>每个数据行表示结果集的一行数据.</p>
- * 
- * @author zhangliang
- */
+/* 结果集数据行接口 每个数据行表示结果集的一行数据 */
 public interface ResultSetRow {
     
     /**
@@ -44,7 +37,8 @@ public interface ResultSetRow {
     
     /**
      * 判断列索引是否在数据行范围.
-     * 
+     * 判断字段下标是否是有效的
+     *
      * @param columnIndex 列索引, 与JDBC保持一致, 从1开始计数
      * @return 列索引是否在数据行范围
      */
