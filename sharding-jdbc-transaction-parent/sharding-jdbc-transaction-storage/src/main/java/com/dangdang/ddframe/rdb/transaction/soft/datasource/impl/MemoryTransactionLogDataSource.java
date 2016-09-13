@@ -22,21 +22,12 @@ import com.dangdang.ddframe.rdb.transaction.soft.datasource.TransactionLogDataSo
 
 import javax.sql.DataSource;
 
-/**
- * 内存事务数据源.
- * 
- * @author caohao
- */
+/* 内存事务数据源 */
 public class MemoryTransactionLogDataSource implements TransactionLogDataSource {
-    
     @Override
-    public TransactionLogDataSourceType getType() {
-        return TransactionLogDataSourceType.MEMORY;
-    }
+    public TransactionLogDataSourceType getType() { return TransactionLogDataSourceType.MEMORY; }
     
     //TODO return memory's map
     @Override
-    public DataSource getDataSource() {
-        throw new UnsupportedOperationException();
-    }
+    public DataSource getDataSource() { throw new UnsupportedOperationException(); }
 }

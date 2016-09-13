@@ -14,53 +14,20 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.api.config;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 最大努力送达型异步作业配置的抽象对象.
- * 
- * @author zhangliang
- */
+/* 最大努力送达型异步作业配置的抽象对象 */
 @Getter
 @Setter
 public abstract class AbstractBestEffortsDeliveryJobConfiguration {
-    
-    /**
-     * 作业的命名空间.
-     */
-    private String jobNamespace = "Best-Efforts-Delivery-Job";
-    
-    /**
-     * 注册中心的等待重试的间隔时间的初始值.
-     */
-    private int zookeeperBaseSleepTimeMilliseconds = 1000;
-    
-    /**
-     * 注册中心的等待重试的间隔时间的最大值.
-     */
-    private int zookeeperMaxSleepTimeMilliseconds = 3000;
-    
-    /**
-     * 注册中心的最大重试次数.
-     */
-    private int zookeeperMaxRetries = 3;
-    
-    /**
-     * 最大努力送达型异步作业名称.
-     */
-    private String jobName = "bestEffortsDeliveryJob";
-    
-    /**
-     * 触发作业的cron表达式.
-     */
-    private String cron = "0/5 * * * * ?";
-    
-    /**
-     * 每次作业获取的事务日志最大数量.
-     */
-    private int transactionLogFetchDataCount = 100;
+    private String jobNamespace = "Best-Efforts-Delivery-Job";  /* 作业的命名空间 */
+    private int zookeeperBaseSleepTimeMilliseconds = 1000;      /* 注册中心的等待重试的间隔时间的初始值 */
+    private int zookeeperMaxSleepTimeMilliseconds = 3000;       /* 注册中心的等待重试的间隔时间的最大值 */
+    private int zookeeperMaxRetries = 3;                        /* 注册中心的最大重试次数 */
+    private String jobName = "bestEffortsDeliveryJob";          /* 最大努力送达型异步作业名称 */
+    private String cron = "0/5 * * * * ?";                      /* 触发作业的cron表达式 */
+    private int transactionLogFetchDataCount = 100;             /* 每次作业获取的事务日志最大数量 */
 }

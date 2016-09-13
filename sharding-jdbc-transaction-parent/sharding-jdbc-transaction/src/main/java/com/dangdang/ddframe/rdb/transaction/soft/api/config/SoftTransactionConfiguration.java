@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.api.config;
 
 import com.dangdang.ddframe.rdb.sharding.jdbc.ShardingDataSource;
@@ -35,48 +34,21 @@ import java.sql.SQLException;
 
 import static com.dangdang.ddframe.rdb.transaction.soft.constants.TransactionLogDataSourceType.RDB;
 
-/**
- * 柔性事务配置对象.
- * 
- * @author zhangliang
- */
+/* 柔性事务配置对象 */
 @RequiredArgsConstructor
 @Getter
 @Setter
 public class SoftTransactionConfiguration {
-    
-    /**
-     * 事务管理器管理的数据源.
-     */
     @Getter(AccessLevel.NONE)
-    private final DataSource targetDataSource;
-    
-    /**
-     * 同步的事务送达的最大尝试次数.
-     */
-    private int syncMaxDeliveryTryTimes = 3;
-    
-    /**
-     * 事务日志存储类型.
-     */
-    private TransactionLogDataSourceType storageType = RDB;
-    
-    /**
-     * 存储事务日志的数据源.
-     */
-    private DataSource transactionLogDataSource;
-    
-    /**
-     * 内嵌的最大努力送达型异步作业配置对象.
-     */
+    private final DataSource targetDataSource;  /* 事务管理器管理的数据源, 本地事务则只有一个db */
+    private int syncMaxDeliveryTryTimes = 3;    /* 同步的事务送达的最大尝试次数 */
+    private TransactionLogDataSourceType storageType = RDB; /* 事务日志存储类型 */
+    private DataSource transactionLogDataSource;    /* 存储事务日志的数据源 */
+
+    /* 内嵌的最大努力送达型异步作业配置对象 */
     private Optional<NestedBestEffortsDeliveryJobConfiguration> bestEffortsDeliveryJobConfiguration = Optional.absent();
     
-    /**
-     * 获取事务管理器管理的数据库连接.
-     * 
-     * @param dataSourceName 数据源名称
-     * @return 事务管理器管理的数据库连接
-     */
+    /* 获取事务管理器管理的数据库连接 */
     public Connection getTargetConnection(final String dataSourceName) throws SQLException {
         if (!(targetDataSource instanceof ShardingDataSource)) {
             return targetDataSource.getConnection();
@@ -84,11 +56,7 @@ public class SoftTransactionConfiguration {
         return ((ShardingDataSource) targetDataSource).getConnection().getConnection(dataSourceName, SQLStatementType.SELECT);
     }
 
-    /**
-     * 构建事务日志事务源.
-     *
-     * @return 存储事务日志的数据源
-     */
+    /* 构建事务日志事务源 */
     public TransactionLogDataSource buildTransactionLogDataSource() {
         TransactionLogDataSource result;
         switch (storageType) {

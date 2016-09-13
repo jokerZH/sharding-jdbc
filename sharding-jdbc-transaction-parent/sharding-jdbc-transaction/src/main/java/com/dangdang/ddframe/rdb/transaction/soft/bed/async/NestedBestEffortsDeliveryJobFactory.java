@@ -21,16 +21,9 @@ import com.dangdang.ddframe.rdb.transaction.soft.api.config.NestedBestEffortsDel
 import com.dangdang.ddframe.rdb.transaction.soft.api.config.SoftTransactionConfiguration;
 import com.dangdang.ddframe.reg.zookeeper.ZookeeperConfiguration;
 
-/**
- * 内嵌的最大努力送达型异步作业工厂.
- * 
- * @author zhangliang
- */
+/* 内嵌的最大努力送达型异步作业工厂 */
 public final class NestedBestEffortsDeliveryJobFactory extends AbstractBestEffortsDeliveryJobFactory<NestedBestEffortsDeliveryJobConfiguration> {
-    
-    public NestedBestEffortsDeliveryJobFactory(final SoftTransactionConfiguration transactionConfig) {
-        super(transactionConfig);
-    }
+    public NestedBestEffortsDeliveryJobFactory(final SoftTransactionConfiguration transactionConfig) { super(transactionConfig); }
     
     @Override
     protected ZookeeperConfiguration createZookeeperConfiguration(final NestedBestEffortsDeliveryJobConfiguration config) {

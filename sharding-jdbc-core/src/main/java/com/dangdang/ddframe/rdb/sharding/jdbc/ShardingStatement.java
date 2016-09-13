@@ -76,7 +76,6 @@ public class ShardingStatement extends AbstractStatementAdapter {
     public Connection getConnection() throws SQLException { return shardingConnection; }
 
 
-
                         /********  execute  *********/
     /* 单独处理resultSet的情况 */
     @Override

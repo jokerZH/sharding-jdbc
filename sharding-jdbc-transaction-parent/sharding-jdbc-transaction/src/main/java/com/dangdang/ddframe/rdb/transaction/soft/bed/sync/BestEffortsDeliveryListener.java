@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.bed.sync;
 
 import com.dangdang.ddframe.rdb.sharding.executor.event.DMLExecutionEvent;
@@ -37,11 +36,7 @@ import java.sql.SQLException;
 
 import static com.dangdang.ddframe.rdb.transaction.soft.constants.SoftTransactionType.BestEffortsDelivery;
 
-/**
- * 最大努力送达型事务监听器.
- * 
- * @author zhangliang
- */
+/* 最大努力送达型事务监听器, 处理dml语句,到mysql上执行, 用户事务的情况 */
 @Slf4j
 public final class BestEffortsDeliveryListener implements DMLExecutionEventListener {
     
@@ -95,7 +90,8 @@ public final class BestEffortsDeliveryListener implements DMLExecutionEventListe
                 throw new UnsupportedOperationException(event.getEventExecutionType().toString());
         }
     }
-    
+
+    /**/
     private boolean isProcessContinuously() {
         return SoftTransactionManager.getCurrentTransaction().isPresent()
                 && BestEffortsDelivery == SoftTransactionManager.getCurrentTransaction().get().getTransactionType();

@@ -41,7 +41,7 @@ import java.util.Map;
 public final class ShardingConnection extends AbstractConnectionAdapter {
     @Getter(AccessLevel.PACKAGE)
     private final ShardingContext shardingContext;
-    private final Map<String, Connection> connectionMap = new HashMap<>();  /* 使用到的物理db连接 */
+    private final Map<String, Connection> connectionMap = new HashMap<>();  /* 使用到的物理db连接,缓存 */
     
     /* 根据数据源名称获取相应的物理数据库连接, 真正执行的时候需要使用到 */
     public Connection getConnection(final String dataSourceName, final SQLStatementType sqlStatementType) throws SQLException {

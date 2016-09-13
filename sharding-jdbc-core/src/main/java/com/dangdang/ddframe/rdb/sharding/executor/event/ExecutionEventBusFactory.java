@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.executor.event;
 
 import lombok.AccessLevel;
@@ -22,23 +21,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * 事件总线工厂.
- * 
- * @author gaohongtao
- */
+/* 事件总线工厂 多对生产者和消费者 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ExecutionEventBusFactory {
-    
     private static final ConcurrentHashMap<String, ExecutionEventBus> CONTAINER = new ConcurrentHashMap<>();
     
-    /**
-     * 获取事件总线实例.
-     * 
-     * @param name 事件总线名称
-     * @return 事件总线实例
-     */
-    public static ExecutionEventBus getInstance(final String name) {
+    /* 获取事件总线实例 */
+    public static ExecutionEventBus/*事件总线实例*/ getInstance(final String name/*事件总线名称*/) {
         if (CONTAINER.containsKey(name)) {
             return CONTAINER.get(name);
         }

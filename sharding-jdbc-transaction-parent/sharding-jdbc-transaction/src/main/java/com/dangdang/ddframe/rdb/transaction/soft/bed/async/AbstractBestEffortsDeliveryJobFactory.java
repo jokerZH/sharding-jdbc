@@ -27,19 +27,12 @@ import com.dangdang.ddframe.reg.zookeeper.ZookeeperConfiguration;
 import com.dangdang.ddframe.reg.zookeeper.ZookeeperRegistryCenter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 最大努力送达型异步作业的抽象工厂.
- * 
- * @author zhangliang
- */
+/* 最大努力送达型异步作业的抽象工厂 */
 @RequiredArgsConstructor
 public abstract class AbstractBestEffortsDeliveryJobFactory<T extends AbstractBestEffortsDeliveryJobConfiguration> {
-    
     private final SoftTransactionConfiguration transactionConfig;
     
-    /**
-     * 初始化作业.
-     */
+    /* 初始化作业 */
     public final void init() {
         @SuppressWarnings("unchecked")
         T bedJobConfig = (T) transactionConfig.getBestEffortsDeliveryJobConfiguration().get();
@@ -50,9 +43,11 @@ public abstract class AbstractBestEffortsDeliveryJobFactory<T extends AbstractBe
         jobScheduler.setField("transactionLogStorage", TransactionLogStorageFactory.createTransactionLogStorage(transactionConfig.buildTransactionLogDataSource()));
         jobScheduler.init();
     }
-    
+
+    /* 创建zookeeper的配置 */
     protected abstract ZookeeperConfiguration createZookeeperConfiguration(final T config);
-    
+
+    /* 创建一个任务的配置 TODO 感觉是定期执行 */
     private JobConfiguration createBedJobConfiguration(final T bedJobConfig) {
         JobConfiguration result = new JobConfiguration(bedJobConfig.getJobName(), NestedBestEffortsDeliveryJob.class, 1, bedJobConfig.getCron());
         result.setFetchDataCount(bedJobConfig.getTransactionLogFetchDataCount());

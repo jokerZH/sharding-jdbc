@@ -20,20 +20,11 @@ package com.dangdang.ddframe.rdb.transaction.soft.datasource;
 import com.dangdang.ddframe.rdb.transaction.soft.constants.TransactionLogDataSourceType;
 import javax.sql.DataSource;
 
-/**
- * 事务数据源.
- * 
- * @author caohao
- */
+/* 事务数据源 */
 public interface TransactionLogDataSource {
-    
-    /**
-     * 获取数据源类型.
-     */
+    /* 获取数据源类型 */
     TransactionLogDataSourceType getType();
     
-    /**
-     * 获取数据源.
-     */
+    /* 获取数据源 */
     DataSource getDataSource();
 }

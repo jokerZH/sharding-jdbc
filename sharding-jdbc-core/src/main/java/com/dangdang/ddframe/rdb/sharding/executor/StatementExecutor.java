@@ -40,25 +40,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public final class StatementExecutor {
     private final ExecutorEngine executorEngine;    /* 多线程处理器 */
-    
     private final Collection<StatementExecutorWrapper> statementExecutorWrappers = new ArrayList<>();   /* 对应mysql物理后端执行单元 */
     
-    /**
-     * 添加静态语句对象至执行上下文.
-     *
-     * @param statementExecutorWrapper 静态语句对象的执行上下文
-     */
-    public void addStatement(final StatementExecutorWrapper statementExecutorWrapper) {
-        statementExecutorWrappers.add(statementExecutorWrapper);
-    }
+    /* 添加静态语句对象至执行上下文 */
+    public void addStatement(final StatementExecutorWrapper statementExecutorWrapper) { statementExecutorWrappers.add(statementExecutorWrapper); }
     
-    /**
-     * 执行SQL查询.
-     * 
-     * @return 结果集列表
-     */
+    /* 执行SQL查询 */
     public List<ResultSet> executeQuery() {
         Context context = MetricsContext.start("ShardingStatement-executeQuery");
+
         postExecutionEvents();
         final boolean isExceptionThrown = ExecutorExceptionHandler.isExceptionThrown();
         final Map<String, Object> dataMap = ExecutorDataMap.getDataMap();
@@ -272,7 +262,8 @@ public final class StatementExecutor {
         postExecutionEventsAfterExecution(statementExecutorWrapper);
         return result;
     }
-    
+
+    /* */
     private void postExecutionEvents() {
         for (StatementExecutorWrapper each : statementExecutorWrappers) {
             if (each.getDMLExecutionEvent().isPresent()) {

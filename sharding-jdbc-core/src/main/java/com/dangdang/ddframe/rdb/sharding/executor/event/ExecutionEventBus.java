@@ -21,22 +21,12 @@ import com.google.common.eventbus.EventBus;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * 事件总线.
- * 
- * @author gaohongtao.
- */
+/* 事件总线, 生产者 消费者模型, register注册消费者, post讲event发送给消费者 */
 public class ExecutionEventBus {
-    
     private final EventBus instance = new EventBus();
-    
     private final ConcurrentHashMap<String, ExecutionEventListener> listeners = new ConcurrentHashMap<>();
     
-    /**
-     * SQL执行事件.
-     *
-     * @param event SQL执行事件
-     */
+    /* SQL执行事件 */
     public void post(final ExecutionEvent event) {
         if (listeners.isEmpty()) {
             return;
@@ -44,11 +34,7 @@ public class ExecutionEventBus {
         instance.post(event);
     }
     
-    /**
-     * 注册事件监听器.
-     *
-     * @param listener DML类SQL执行事件监听器
-     */
+    /* 注册事件监听器 */
     public void register(final ExecutionEventListener listener) {
         if (null != listeners.putIfAbsent(listener.getName(), listener)) {
             return;
@@ -56,9 +42,7 @@ public class ExecutionEventBus {
         instance.register(listener);
     }
     
-    /**
-     * 清除监听器.
-     */
+    /* 清除监听器 */
     public synchronized void clearListener() {
         for (ExecutionEventListener each : listeners.values()) {
             instance.unregister(each);

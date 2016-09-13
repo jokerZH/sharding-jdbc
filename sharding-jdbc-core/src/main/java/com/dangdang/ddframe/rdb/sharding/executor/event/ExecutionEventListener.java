@@ -14,21 +14,11 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.sharding.executor.event;
 
-/**
- * 事件监听器.
- * 
- * @author gaohongtao
- */
+/* 事件监听器 */
 interface ExecutionEventListener {
-    
-    /**
-     * SQL执行时事件监听器.
-     *
-     * @return SQL执行时事件监听器名称
-     */
-    String getName();
+    /* SQL执行时事件监听器 */
+    String/*SQL执行时事件监听器名称*/ getName();
     
 }

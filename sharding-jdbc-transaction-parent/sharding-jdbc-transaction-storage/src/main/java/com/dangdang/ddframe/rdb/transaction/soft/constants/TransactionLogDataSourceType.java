@@ -14,23 +14,10 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.constants;
 
-/**
- * 事务日志存储类型.
- * 
- * @author zhangliang
- */
+/* 事务日志存储类型 */
 public enum TransactionLogDataSourceType {
-    
-    /**
-     *  内存存储.
-     */
-    MEMORY, 
-    
-    /**
-     * 数据库存储.
-     */
-    RDB
+    MEMORY, /* 内存存储 */
+    RDB     /* 数据库存储 */
 }

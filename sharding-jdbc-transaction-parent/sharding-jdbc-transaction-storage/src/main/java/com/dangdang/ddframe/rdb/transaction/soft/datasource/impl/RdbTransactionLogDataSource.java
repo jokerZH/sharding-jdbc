@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.datasource.impl;
 
 import com.dangdang.ddframe.rdb.transaction.soft.constants.TransactionLogDataSourceType;
@@ -23,23 +22,13 @@ import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 
-/**
- * 关系型数据库事务数据源.
- * 
- * @author caohao
- */
+/* 关系型数据库事务数据源 */
 @RequiredArgsConstructor
 public class RdbTransactionLogDataSource implements TransactionLogDataSource {
-    
-    private final DataSource dataSource;
-    
-    @Override
-    public TransactionLogDataSourceType getType() {
-        return TransactionLogDataSourceType.RDB;
-    }
+    private final DataSource dataSource;    /* 事务相关的数据源 */
     
     @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+    public TransactionLogDataSourceType getType() { return TransactionLogDataSourceType.RDB; }
+    @Override
+    public DataSource getDataSource() { return dataSource; }
 }

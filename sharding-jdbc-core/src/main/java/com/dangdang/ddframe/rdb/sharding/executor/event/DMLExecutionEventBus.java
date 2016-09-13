@@ -20,38 +20,17 @@ package com.dangdang.ddframe.rdb.sharding.executor.event;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * DML类SQL执行时的事件发布总线.
- * 
- * @author zhangliang
- */
+/* DML类SQL执行时的事件发布总线 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DMLExecutionEventBus {
-    
     private static final String NAME = "DML-EventBus";
     
-    /**
-     * 发布DML类SQL执行事件.
-     * 
-     * @param event DML类SQL执行事件
-     */
-    public static void post(final DMLExecutionEvent event) {
-        ExecutionEventBusFactory.getInstance(NAME).post(event);
-    }
+    /* 发布DML类SQL执行事件, 讲event发送给执行者 TODO 异步实现 */
+    public static void post(final DMLExecutionEvent event) { ExecutionEventBusFactory.getInstance(NAME).post(event); }
     
-    /**
-     * 发布DML类SQL执行事件监听器.
-     * 
-     * @param listener DML类SQL执行事件监听器
-     */
-    public static void register(final DMLExecutionEventListener listener) {
-        ExecutionEventBusFactory.getInstance(NAME).register(listener);
-    }
+    /* 发布DML类SQL执行事件监听器 */
+    public static void register(final DMLExecutionEventListener listener) { ExecutionEventBusFactory.getInstance(NAME).register(listener); }
     
-    /**
-     * 清除监听器.
-     */
-    public static void clearListener() {
-        ExecutionEventBusFactory.getInstance(NAME).clearListener();
-    }
+    /* 清除监听器 */
+    public static void clearListener() { ExecutionEventBusFactory.getInstance(NAME).clearListener(); }
 }

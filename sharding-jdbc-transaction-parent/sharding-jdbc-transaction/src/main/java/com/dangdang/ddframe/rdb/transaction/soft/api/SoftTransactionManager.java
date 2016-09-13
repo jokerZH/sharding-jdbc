@@ -14,7 +14,6 @@
  * limitations under the License.
  * </p>
  */
-
 package com.dangdang.ddframe.rdb.transaction.soft.api;
 
 import com.dangdang.ddframe.rdb.sharding.executor.ExecutorDataMap;
@@ -35,26 +34,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- * 柔性事务管理器.
- * 
- * @author zhangliang
- * @author caohao
- */
+/* 柔性事务管理器 */
 @RequiredArgsConstructor
 public final class SoftTransactionManager {
-
     private static final String TRANSACTION = "transaction";
-
     private static final String TRANSACTION_CONFIG = "transactionConfig";
 
     @Getter
-    private final SoftTransactionConfiguration transactionConfig;
+    private final SoftTransactionConfiguration transactionConfig;   /* 事务的配置 */
     
-    /**
-     * 初始化事务管理器.
-     */
+    /* 初始化事务管理器 */
     public void init() throws SQLException {
+        // 注册处理器
         DMLExecutionEventBus.register(new BestEffortsDeliveryListener());
         if (TransactionLogDataSourceType.RDB == transactionConfig.getStorageType()) {
             Preconditions.checkNotNull(transactionConfig.getTransactionLogDataSource());
@@ -64,7 +55,8 @@ public final class SoftTransactionManager {
             new NestedBestEffortsDeliveryJobFactory(transactionConfig).init();
         }
     }
-    
+
+    /* 在db中创建事务表 */
     private void createTable() throws SQLException {
         String dbSchema = "CREATE TABLE IF NOT EXISTS `transaction_log` ("
                 + "`id` VARCHAR(40) NOT NULL, "
@@ -75,9 +67,11 @@ public final class SoftTransactionManager {
                 + "`creation_time` LONG NOT NULL, "
                 + "`async_delivery_try_times` INT NOT NULL DEFAULT 0, "
                 + "PRIMARY KEY (`id`));";
+
         try (
                 Connection conn = transactionConfig.getTransactionLogDataSource().getConnection();
-                PreparedStatement preparedStatement = conn.prepareStatement(dbSchema)) {
+                PreparedStatement preparedStatement = conn.prepareStatement(dbSchema)
+        ) {
             preparedStatement.executeUpdate();
         }
     }
@@ -97,7 +91,7 @@ public final class SoftTransactionManager {
             case TryConfirmCancel:
                 result = new TCCSoftTransaction();
                 break;
-            default: 
+            default:
                 throw new UnsupportedOperationException(type.toString());
         }
         // TODO 目前使用不支持嵌套事务，以后这里需要可配置
@@ -108,7 +102,7 @@ public final class SoftTransactionManager {
         ExecutorDataMap.getDataMap().put(TRANSACTION_CONFIG, transactionConfig);
         return result;
     }
-    
+
     /**
      * 获取当前线程的柔性事务配置.
      * 

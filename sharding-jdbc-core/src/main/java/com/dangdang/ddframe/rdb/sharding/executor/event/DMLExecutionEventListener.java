@@ -17,10 +17,6 @@
 
 package com.dangdang.ddframe.rdb.sharding.executor.event;
 
-/**
- * DML类SQL执行时事件监听器.
- * 
- * @author zhangliang
- */
+/* DML类SQL执行时事件监听器 */
 public interface DMLExecutionEventListener extends ExecutionEventListener {
 }
