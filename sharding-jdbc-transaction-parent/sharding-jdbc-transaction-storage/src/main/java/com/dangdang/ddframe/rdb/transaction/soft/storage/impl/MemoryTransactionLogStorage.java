@@ -28,25 +28,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * 基于内存的事务日志存储器接口.
- * 
- * @author zhangliang
- */
+/* 基于内存的事务日志存储器接口 */
 @RequiredArgsConstructor
 public final class MemoryTransactionLogStorage implements TransactionLogStorage {
-    
-    private static final ConcurrentHashMap<String, TransactionLog> DATA = new ConcurrentHashMap<>();
-    
-    @Override
-    public void add(final TransactionLog transactionLog) {
-        DATA.putIfAbsent(transactionLog.getId(), transactionLog);
-    }
+    private static final ConcurrentHashMap<String/*业务主键id*/, TransactionLog> DATA = new ConcurrentHashMap<>();
     
     @Override
-    public void remove(final String id) {
-        DATA.remove(id);
-    }
+    public void add(final TransactionLog transactionLog) { DATA.putIfAbsent(transactionLog.getId(), transactionLog); }
+    @Override
+    public void remove(final String id) { DATA.remove(id); }
     
     @Override
     public List<TransactionLog> findEligibleTransactionLogs(final int size, final int maxDeliveryTryTimes, final long maxDeliveryTryDelayMillis) {

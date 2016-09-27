@@ -23,18 +23,10 @@ import com.dangdang.ddframe.rdb.transaction.soft.constants.SoftTransactionType;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * 最大努力送达型柔性事务.
- * 
- * @author zhangliang
- */
+/* 最大努力送达型柔性事务 */
 public class BEDSoftTransaction extends AbstractSoftTransaction {
     
-    /**
-     * 开启柔性事务.
-     * 
-     * @param connection 数据库连接对象
-     */
+    /* 开启柔性事务 */
     public void begin(final Connection connection) throws SQLException {
         beginInternal(connection, SoftTransactionType.BestEffortsDelivery);
     }

@@ -29,18 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 最大努力送达型异步作业.
- * 
- * @author zhangliang
- * @author caohao
- */
+/* 最大努力送达型异步作业, 由一个定期执行的框架调用 */
 @Slf4j
 public class NestedBestEffortsDeliveryJob extends AbstractIndividualThroughputDataFlowElasticJob<TransactionLog> {
-    
     @Setter
     private SoftTransactionConfiguration transactionConfig;
-    
     @Setter
     private TransactionLogStorage transactionLogStorage;
     
@@ -62,7 +55,5 @@ public class NestedBestEffortsDeliveryJob extends AbstractIndividualThroughputDa
     }
     
     @Override
-    public boolean isStreamingProcess() {
-        return false;
-    }
+    public boolean isStreamingProcess() { return false; }
 }

@@ -47,9 +47,10 @@ public abstract class AbstractBestEffortsDeliveryJobFactory<T extends AbstractBe
     /* 创建zookeeper的配置 */
     protected abstract ZookeeperConfiguration createZookeeperConfiguration(final T config);
 
-    /* 创建一个任务的配置 TODO 感觉是定期执行 */
+    /* 创建一个任务的配置 定期执行 NestedBestEffortsDeliveryJob */
     private JobConfiguration createBedJobConfiguration(final T bedJobConfig) {
         JobConfiguration result = new JobConfiguration(bedJobConfig.getJobName(), NestedBestEffortsDeliveryJob.class, 1, bedJobConfig.getCron());
+        // 设置最大size
         result.setFetchDataCount(bedJobConfig.getTransactionLogFetchDataCount());
         return result;
     }

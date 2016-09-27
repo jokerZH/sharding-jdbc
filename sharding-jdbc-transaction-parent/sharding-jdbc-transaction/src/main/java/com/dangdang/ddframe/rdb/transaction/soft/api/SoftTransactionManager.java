@@ -47,10 +47,13 @@ public final class SoftTransactionManager {
     public void init() throws SQLException {
         // 注册处理器
         DMLExecutionEventBus.register(new BestEffortsDeliveryListener());
+
+        // 给rdb创建表
         if (TransactionLogDataSourceType.RDB == transactionConfig.getStorageType()) {
             Preconditions.checkNotNull(transactionConfig.getTransactionLogDataSource());
             createTable();
         }
+
         if (transactionConfig.getBestEffortsDeliveryJobConfiguration().isPresent()) {
             new NestedBestEffortsDeliveryJobFactory(transactionConfig).init();
         }
@@ -103,28 +106,16 @@ public final class SoftTransactionManager {
         return result;
     }
 
-    /**
-     * 获取当前线程的柔性事务配置.
-     * 
-     * @return 当前线程的柔性事务配置
-     */
+    /* 获取当前线程的柔性事务配置 */
     public static Optional<SoftTransactionConfiguration> getCurrentTransactionConfiguration() {
         Object transactionConfig = ExecutorDataMap.getDataMap().get(TRANSACTION_CONFIG);
-        return (null == transactionConfig)
-                ? Optional.<SoftTransactionConfiguration>absent()
-                : Optional.of((SoftTransactionConfiguration) transactionConfig);
+        return (null == transactionConfig) ? Optional.<SoftTransactionConfiguration>absent() : Optional.of((SoftTransactionConfiguration) transactionConfig);
     }
     
-    /**
-     * 获取当前的柔性事务.
-     * 
-     * @return 当前的柔性事务
-     */
+    /* 获取当前的柔性事务 */
     public static Optional<AbstractSoftTransaction> getCurrentTransaction() {
         Object transaction = ExecutorDataMap.getDataMap().get(TRANSACTION);
-        return (null == transaction)
-                ? Optional.<AbstractSoftTransaction>absent()
-                : Optional.of((AbstractSoftTransaction) transaction);
+        return (null == transaction) ? Optional.<AbstractSoftTransaction>absent() : Optional.of((AbstractSoftTransaction) transaction);
     }
     
     /**

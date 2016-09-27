@@ -27,24 +27,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 
-/**
- * 柔性事务抽象类.
- * 
- * @author zhangliang 
- */
+/* 柔性事务抽象类 */
 public abstract class AbstractSoftTransaction {
-    
-    private boolean previousAutoCommit;
+    private boolean previousAutoCommit;     /* 执行前是否是是是事务中 */
     
     @Getter
     private ShardingConnection connection;
-    
     @Getter
     private SoftTransactionType transactionType;
-    
     @Getter
     private String transactionId;
-    
+
+    /* 开始柔性事务 */
     protected final void beginInternal(final Connection conn, final SoftTransactionType type) throws SQLException {
         // TODO 判断如果在传统事务中，则抛异常
         Preconditions.checkArgument(conn instanceof ShardingConnection, "Only ShardingConnection can support eventual consistency transaction.");
@@ -57,9 +51,7 @@ public abstract class AbstractSoftTransaction {
         transactionId = UUID.randomUUID().toString();
     }
     
-    /**
-     * 结束柔性事务.
-     */
+    /* 结束柔性事务 */
     public final void end() throws SQLException {
         if (connection != null) {
             ExecutorExceptionHandler.setExceptionThrown(true);

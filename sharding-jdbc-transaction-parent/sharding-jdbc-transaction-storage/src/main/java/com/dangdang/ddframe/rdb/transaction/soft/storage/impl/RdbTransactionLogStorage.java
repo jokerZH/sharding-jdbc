@@ -34,19 +34,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 基于数据库的事务日志存储器接口.
- *
- * @author zhangliang
- */
+/* 基于数据库的事务日志存储器接口 */
 @RequiredArgsConstructor
 public final class RdbTransactionLogStorage implements TransactionLogStorage {
-    
-    private final DataSource dataSource;
+    private final DataSource dataSource;    /* 事务日志datasource */
     
     @Override
     public void add(final TransactionLog transactionLog) {
-        String sql = "INSERT INTO `transaction_log` (`id`, `transaction_type`, `data_source`, `sql`, `parameters`, `creation_time`) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO `transaction_log` " +
+                "(`id`, `transaction_type`, `data_source`, `sql`, `parameters`, `creation_time`) VALUES (?, ?, ?, ?, ?, ?);";
         try (
             Connection conn = dataSource.getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
@@ -112,7 +108,8 @@ public final class RdbTransactionLogStorage implements TransactionLogStorage {
             throw new TransactionLogStorageException(ex);
         }
     }
-    
+
+    /* 执行业务sql语句 */
     @Override
     public boolean processData(final Connection connection, final TransactionLog transactionLog, final int maxDeliveryTryTimes) {
         try (

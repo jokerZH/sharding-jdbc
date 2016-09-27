@@ -49,7 +49,7 @@ public class SoftTransactionConfiguration {
     private Optional<NestedBestEffortsDeliveryJobConfiguration> bestEffortsDeliveryJobConfiguration = Optional.absent();
     
     /* 获取事务管理器管理的数据库连接 */
-    public Connection getTargetConnection(final String dataSourceName) throws SQLException {
+    public Connection getTargetConnection(final String dataSourceName/*sliceName*/) throws SQLException {
         if (!(targetDataSource instanceof ShardingDataSource)) {
             return targetDataSource.getConnection();
         }

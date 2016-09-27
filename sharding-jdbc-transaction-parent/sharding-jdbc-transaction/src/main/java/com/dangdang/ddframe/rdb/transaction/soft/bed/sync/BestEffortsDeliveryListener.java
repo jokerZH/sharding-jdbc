@@ -46,6 +46,7 @@ public final class BestEffortsDeliveryListener implements DMLExecutionEventListe
         if (!isProcessContinuously()) {
             return;
         }
+
         SoftTransactionConfiguration transactionConfig = SoftTransactionManager.getCurrentTransactionConfiguration().get();
         TransactionLogStorage transactionLogStorage = TransactionLogStorageFactory.createTransactionLogStorage(transactionConfig.buildTransactionLogDataSource());
         BEDSoftTransaction bedSoftTransaction = (BEDSoftTransaction) SoftTransactionManager.getCurrentTransaction().get();
@@ -91,7 +92,7 @@ public final class BestEffortsDeliveryListener implements DMLExecutionEventListe
         }
     }
 
-    /**/
+    /* 是否在一个最大努力送达的事务中 */
     private boolean isProcessContinuously() {
         return SoftTransactionManager.getCurrentTransaction().isPresent()
                 && BestEffortsDelivery == SoftTransactionManager.getCurrentTransaction().get().getTransactionType();
@@ -106,7 +107,8 @@ public final class BestEffortsDeliveryListener implements DMLExecutionEventListe
             return false;
         }
     }
-    
+
+    /* 清理jdbc资源 */
     private void close(final boolean isNewConnection, final Connection conn, final PreparedStatement preparedStatement) {
         if (null != preparedStatement) {
             try {
@@ -125,7 +127,5 @@ public final class BestEffortsDeliveryListener implements DMLExecutionEventListe
     }
     
     @Override
-    public String getName() {
-        return getClass().getName();
-    }
+    public String getName() { return getClass().getName(); }
 }

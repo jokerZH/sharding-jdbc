@@ -29,18 +29,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * 最大努力送达型异步作业.
- * 
- * @author zhangliang
- * @author caohao
- */
+/* 最大努力送达型异步作业 */
 @Slf4j
 public class BestEffortsDeliveryJob extends AbstractIndividualThroughputDataFlowElasticJob<TransactionLog> {
-    
     @Setter
     private BestEffortsDeliveryConfiguration bedConfig;
-    
     @Setter
     private TransactionLogStorage transactionLogStorage;
     

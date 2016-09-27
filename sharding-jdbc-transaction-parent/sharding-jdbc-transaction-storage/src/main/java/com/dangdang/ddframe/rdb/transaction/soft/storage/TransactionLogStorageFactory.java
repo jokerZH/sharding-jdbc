@@ -23,21 +23,12 @@ import com.dangdang.ddframe.rdb.transaction.soft.storage.impl.MemoryTransactionL
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * 事务日志存储器工厂.
- * 
- * @author zhangliang
- */
+/* 事务日志存储器工厂 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TransactionLogStorageFactory {
     
-    /**
-     * 创建事务日志存储器.
-     *
-     * @param transactionLogDataSource 事务数据源对象
-     * @return 事务日志存储器
-     */
-    public static TransactionLogStorage createTransactionLogStorage(final TransactionLogDataSource transactionLogDataSource) {
+    /* 创建事务日志存储器 */
+    public static TransactionLogStorage createTransactionLogStorage(final TransactionLogDataSource transactionLogDataSource/*事务数据源对象*/) {
         switch (transactionLogDataSource.getType()) {
             case MEMORY:
                 return new MemoryTransactionLogStorage();

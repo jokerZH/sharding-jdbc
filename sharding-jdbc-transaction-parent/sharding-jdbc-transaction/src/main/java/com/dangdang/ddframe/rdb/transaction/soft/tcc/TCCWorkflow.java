@@ -17,11 +17,7 @@
 
 package com.dangdang.ddframe.rdb.transaction.soft.tcc;
 
-/**
- * TCC工作流.
- * 
- * @author zhangliang 
- */
+/* TCC工作流 */
 public enum TCCWorkflow {
 
     /**

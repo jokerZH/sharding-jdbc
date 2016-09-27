@@ -20,37 +20,22 @@ package com.dangdang.ddframe.rdb.transaction.soft.config;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 异步柔性事务注册中心配置对象.
- * 
- * @author caohao
- */
+/* 异步柔性事务注册中心配置对象 */
 @Getter
 @Setter
 public class AsyncSoftTransactionZookeeperConfiguration {
-    
-    /**
-     * 注册中心的连接地址.
-     */
+    /* 注册中心的连接地址 */
     private String connectionString;
     
-    /**
-     * 作业的命名空间.
-     */
+    /* 作业的命名空间 */
     private String namespace = "Best-Efforts-Delivery-Job";
     
-    /**
-     * 注册中心的等待重试的间隔时间的初始值.
-     */
+    /* 注册中心的等待重试的间隔时间的初始值 */
     private int baseSleepTimeMilliseconds = 1000;
     
-    /**
-     * 注册中心的等待重试的间隔时间的最大值.
-     */
+    /* 注册中心的等待重试的间隔时间的最大值 */
     private int maxSleepTimeMilliseconds = 3000;
     
-    /**
-     * 注册中心的最大重试次数.
-     */
+    /* 注册中心的最大重试次数 */
     private int maxRetries = 3;
 }

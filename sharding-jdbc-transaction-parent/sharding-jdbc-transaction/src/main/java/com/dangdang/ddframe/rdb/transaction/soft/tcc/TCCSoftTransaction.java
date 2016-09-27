@@ -23,18 +23,10 @@ import com.dangdang.ddframe.rdb.transaction.soft.constants.SoftTransactionType;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * TCC型柔性事务.
- * 
- * @author zhangliang
- */
+/* TCC型柔性事务 */
 public final class TCCSoftTransaction extends AbstractSoftTransaction {
     
-    /**
-     * 开启柔性事务.
-     * 
-     * @param connection 数据库连接对象
-     */
+    /* 开启柔性事务 */
     public void begin(final Connection connection) throws SQLException {
         beginInternal(connection, SoftTransactionType.TryConfirmCancel);
     }

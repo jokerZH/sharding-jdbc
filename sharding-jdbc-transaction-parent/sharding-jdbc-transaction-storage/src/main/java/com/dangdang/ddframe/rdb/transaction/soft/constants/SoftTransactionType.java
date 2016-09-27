@@ -17,32 +17,25 @@
 
 package com.dangdang.ddframe.rdb.transaction.soft.constants;
 
-/**
- * 柔性事务类型.
- * 
- * @author zhangliang
- */
+/* 柔性事务类型 */
 public enum SoftTransactionType {
     
     /**
      * 最大努力送达型事务.
      * 
-     * <p>
-     * 使用要求: 
+     * 使用要求:
      * INSERT语句要求必须包含主键(不能是自增主键).
      * UPDATE语句要求幂等.
      * DELETE语句无要求.
-     * </p>
      */
     BestEffortsDelivery, 
     
     /**
      * TCC型事务.
      * 
-     * <p>
-     * 使用要求: 
+     * 使用要求:
      * 业务方提供cancel方法.
-     * </p>
+     * 失败会cancel
      */
     TryConfirmCancel
 }

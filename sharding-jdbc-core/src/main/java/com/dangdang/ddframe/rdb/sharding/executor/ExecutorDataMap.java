@@ -23,14 +23,9 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 执行器执行时数据处理类.
- *
- * @author caohao
- */
+/* 执行器执行时数据处理类 */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ExecutorDataMap {
-    
     private static ThreadLocal<Map<String, Object>> dataMap = new ThreadLocal<Map<String, Object>>() {
         
         @Override
@@ -39,21 +34,9 @@ public final class ExecutorDataMap {
         }
     };
     
-    /**
-     * 设置数据Map.
-     *
-     * @param dataMap 数据Map
-     */
-    public static void setDataMap(final Map<String, Object> dataMap) {
-        ExecutorDataMap.dataMap.set(dataMap);
-    }
+    /* 设置数据Map */
+    public static void setDataMap(final Map<String, Object> dataMap) { ExecutorDataMap.dataMap.set(dataMap); }
     
-    /**
-     * 获取数据Map.
-     *
-     * @return 数据Map
-     */
-    public static Map<String, Object> getDataMap() {
-        return dataMap.get();
-    }
+    /* 获取数据Map */
+    public static Map<String, Object> getDataMap() { return dataMap.get(); }
 }

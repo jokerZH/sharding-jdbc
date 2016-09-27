@@ -24,29 +24,18 @@ import lombok.Setter;
 
 import java.util.List;
 
-/**
- * 事务日志.
- * 
- * @author zhangliang
- */
+/* 事务日志记录 */
 @AllArgsConstructor
 @Getter
 public final class TransactionLog {
-    
-    private final String id;
-    
-    private final String transactionId;
-    
-    private final SoftTransactionType transactionType;
-    
-    private final String dataSource;
-    
-    private final String sql;
-    
-    private final List<Object> parameters;
-
-    private final long creationTime;
+    private final String id;                            /* 业务主键 */
+    private final String transactionId;                 /* 事物id */
+    private final SoftTransactionType transactionType;  /* 事物类型 */
+    private final String dataSource;                    /* 目标分片 */
+    private final String sql;                           /* 执行的sql语句 */
+    private final List<Object> parameters;              /* sql的参数 */
+    private final long creationTime;                    /* 创建时间 */
     
     @Setter
-    private int asyncDeliveryTryTimes;
+    private int asyncDeliveryTryTimes;  /* 异步执行的次数 */
 }
