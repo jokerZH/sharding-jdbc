@@ -55,8 +55,11 @@ public final class StatementExecutor {
         List<ResultSet> result;
         try {
             if (1 == statementExecutorWrappers.size()) {
+                // 单个物理sql，直接执行
                 return Collections.singletonList(executeQueryInternal(statementExecutorWrappers.iterator().next(), isExceptionThrown, dataMap));
             }
+
+            // 多个sql语句 异步执行
             result = executorEngine.execute(statementExecutorWrappers, new ExecuteUnit<StatementExecutorWrapper, ResultSet>() {
         
                 @Override
@@ -69,7 +72,8 @@ public final class StatementExecutor {
         }
         return result;
     }
-    
+
+    /* 执行单个sql */
     private ResultSet executeQueryInternal(final StatementExecutorWrapper statementExecutorWrapper, final boolean isExceptionThrown, final Map<String, Object> dataMap) {
         ResultSet result;
         ExecutorExceptionHandler.setExceptionThrown(isExceptionThrown);
@@ -85,11 +89,7 @@ public final class StatementExecutor {
         return result;
     }
     
-    /**
-     * 执行SQL更新.
-     * 
-     * @return 更新数量
-     */
+    /* 执行SQL更新 */
     public int executeUpdate() {
         return executeUpdate(new Updater() {
             
@@ -263,7 +263,7 @@ public final class StatementExecutor {
         return result;
     }
 
-    /* */
+    /* 发送执行对event, bus是在执行物理sql对有所操作 */
     private void postExecutionEvents() {
         for (StatementExecutorWrapper each : statementExecutorWrappers) {
             if (each.getDMLExecutionEvent().isPresent()) {
@@ -273,11 +273,13 @@ public final class StatementExecutor {
             }
         }
     }
-    
+
+    /* 正常执行的情况 */
     private void postExecutionEventsAfterExecution(final StatementExecutorWrapper statementExecutorWrapper) {
         postExecutionEventsAfterExecution(statementExecutorWrapper, EventExecutionType.EXECUTE_SUCCESS, Optional.<SQLException>absent());
     }
-    
+
+    /* 异常情况 */
     private void postExecutionEventsAfterExecution(final StatementExecutorWrapper statementExecutorWrapper, final EventExecutionType eventExecutionType, final Optional<SQLException> exp) {
         if (statementExecutorWrapper.getDMLExecutionEvent().isPresent()) {
             DMLExecutionEvent event = statementExecutorWrapper.getDMLExecutionEvent().get();
@@ -293,12 +295,10 @@ public final class StatementExecutor {
     }
     
     private interface Updater {
-        
         int executeUpdate(Statement statement, String sql) throws SQLException;
     }
     
     private interface Executor {
-        
         boolean execute(Statement statement, String sql) throws SQLException;
     }
 }

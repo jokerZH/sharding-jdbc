@@ -39,17 +39,9 @@ public abstract class AbstractExecutorWrapper {
     /* 判断SQL是否为DQL语句 */
     final boolean isDQL() { return sqlExecutionUnit.getSql().toLowerCase().startsWith("select"); }
     
-    /**
-     * 获取DML类SQL执行时事件.
-     * 
-     * @return DML类SQL执行时事件
-     */
+    /* 获取DML类SQL执行时事件 */
     public abstract Optional<DMLExecutionEvent> getDMLExecutionEvent();
     
-    /**
-     * 获取DML类SQL执行时事件.
-     * 
-     * @return DQL类SQL执行时事件
-     */
+    /* 获取DML类SQL执行时事件 */
     public abstract Optional<DQLExecutionEvent> getDQLExecutionEvent();
 }

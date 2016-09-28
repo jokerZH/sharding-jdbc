@@ -19,18 +19,8 @@ package com.dangdang.ddframe.rdb.sharding.executor.event;
 
 import java.util.List;
 
-/**
- * DQL类SQL执行时事件.
- * 
- * @author gaohongtao
- */
+/* DQL类SQL执行时事件 */
 public final class DQLExecutionEvent extends ExecutionEvent {
-    
-    public DQLExecutionEvent(final String dataSource, final String sql) {
-        super(dataSource, sql);
-    }
-    
-    public DQLExecutionEvent(final String dataSource, final String sql, final List<Object> parameters) {
-        super(dataSource, sql, parameters);
-    }
+    public DQLExecutionEvent(final String dataSource, final String sql) { super(dataSource, sql); }
+    public DQLExecutionEvent(final String dataSource, final String sql, final List<Object> parameters) { super(dataSource, sql, parameters); }
 }

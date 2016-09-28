@@ -24,7 +24,7 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.Collection;
 
-/* 静态语句对象适配类 */
+/* 静态语句对象适配类, 对statement对属性修改对封装 */
 @RequiredArgsConstructor
 public abstract class AbstractStatementAdapter extends AbstractUnsupportedOperationStatement {
     private final Class<? extends Statement> recordTargetClass;

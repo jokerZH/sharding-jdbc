@@ -49,16 +49,13 @@ import java.util.Set;
 public final class SQLRouteEngine {
     private final ShardingRule shardingRule;
     private final DatabaseType databaseType;
-    
-    /* SQL路由 */
-    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/) throws SQLParserException { return route(logicSql, Collections.emptyList()); }
-    
-    /* SQL路由 */
-    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/, final List<Object> parameters/*参数列表*/) throws SQLParserException { return routeSQL(parseSQL(logicSql, parameters), parameters); }
-    
+
     /* 预解析SQL路由 */
     public PreparedSQLRouter/*预解析SQL路由器*/ prepareSQL(final String logicSql/*逻辑SQL*/) { return new PreparedSQLRouter(logicSql, this); }
 
+    /* SQL路由 */
+    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/) throws SQLParserException { return route(logicSql, Collections.emptyList()); }
+    public SQLRouteResult/*路由结果*/ route(final String logicSql/*逻辑SQL*/, final List<Object> parameters/*参数列表*/) throws SQLParserException { return routeSQL(parseSQL(logicSql, parameters), parameters); }
     /* 解析sql语句 */
     SQLParsedResult parseSQL(final String logicSql, final List<Object> parameters) {
         Context context = MetricsContext.start("Parse SQL");

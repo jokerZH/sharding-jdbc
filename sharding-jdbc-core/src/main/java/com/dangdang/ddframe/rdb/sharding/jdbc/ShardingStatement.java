@@ -44,21 +44,17 @@ import java.util.Map;
 public class ShardingStatement extends AbstractStatementAdapter {
     @Getter(AccessLevel.PROTECTED)
     private final ShardingConnection shardingConnection;    /* 指向父对象 */
-    
     @Getter
     private final int resultSetType;            /* 单个或者有聚合运算操作 */
     @Getter
     private final int resultSetConcurrency;     /* commit时候是否提交 */
     @Getter
     private final int resultSetHoldability;     /* 是否开启提交之后还保留resultset的能力 */
-
     @Getter(AccessLevel.PROTECTED)
     private final Map<HashCode, Statement/*物理的statement*/> cachedRoutedStatements = new HashMap<>();    /* 当前执行过程涉及到的物理Statement*/
-    
     @Getter(AccessLevel.PROTECTED)
     @Setter(AccessLevel.PROTECTED)
     private MergeContext mergeContext;  /* 结果集合并 */
-    
     @Setter(AccessLevel.PROTECTED)
     private ResultSet currentResultSet; /* 逻辑的resultSet */
     

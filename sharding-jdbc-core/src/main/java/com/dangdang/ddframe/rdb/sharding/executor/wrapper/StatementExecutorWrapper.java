@@ -27,7 +27,7 @@ import java.sql.Statement;
 /* 静态语句对象的执行上下文 */
 public final class StatementExecutorWrapper extends AbstractExecutorWrapper {
     @Getter
-    private final Statement statement;  /* 所属statement TODO 逻辑的还是物理的 */
+    private final Statement statement;  /* 所属statement 物理的 */
     private final Optional<DMLExecutionEvent> dmlExecutionEvent;
     private final Optional<DQLExecutionEvent> dqlExecutionEvent;
     
