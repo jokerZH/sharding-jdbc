@@ -27,22 +27,15 @@ import lombok.Getter;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-/**
- * 预编译语句对象的执行上下文.
- * 
- * @author zhangliang
- */
+/* 预编译语句对象的执行上下文 */
 public class PreparedStatementExecutorWrapper extends AbstractExecutorWrapper {
-    
     @Getter
     private final PreparedStatement preparedStatement;
     
     private final Optional<DMLExecutionEvent> dmlExecutionEvent;
-    
     private final Optional<DQLExecutionEvent> dqlExecutionEvent;
     
-    public PreparedStatementExecutorWrapper(final PreparedStatement preparedStatement, final List<Object> parameters,
-                                            final SQLExecutionUnit sqlExecutionUnit) {
+    public PreparedStatementExecutorWrapper(final PreparedStatement preparedStatement, final List<Object> parameters, final SQLExecutionUnit sqlExecutionUnit) {
         super(sqlExecutionUnit);
         this.preparedStatement = preparedStatement;
         if (isDML()) {
@@ -58,12 +51,7 @@ public class PreparedStatementExecutorWrapper extends AbstractExecutorWrapper {
     }
     
     @Override
-    public Optional<DMLExecutionEvent> getDMLExecutionEvent() {
-        return dmlExecutionEvent;
-    }
-    
+    public Optional<DMLExecutionEvent> getDMLExecutionEvent() { return dmlExecutionEvent; }
     @Override
-    public Optional<DQLExecutionEvent> getDQLExecutionEvent() {
-        return dqlExecutionEvent;
-    }
+    public Optional<DQLExecutionEvent> getDQLExecutionEvent() { return dqlExecutionEvent; }
 }

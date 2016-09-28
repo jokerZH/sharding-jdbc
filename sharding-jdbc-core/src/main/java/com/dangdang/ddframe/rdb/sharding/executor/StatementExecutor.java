@@ -180,14 +180,9 @@ public final class StatementExecutor {
         return result;
     }
     
-    /**
-     * 执行SQL请求.
-     * 
-     * @return true表示执行DQL语句, false表示执行的DML语句
-     */
     public boolean execute() {
         return execute(new Executor() {
-            
+
             @Override
             public boolean execute(final Statement statement, final String sql) throws SQLException {
                 return statement.execute(sql);

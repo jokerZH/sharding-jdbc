@@ -36,7 +36,6 @@ import com.dangdang.ddframe.rdb.sharding.jdbc.ShardingStatement;
  * @author zhangliang
  */
 public abstract class AbstractUnsupportedOperationPreparedStatement extends ShardingStatement implements PreparedStatement {
-    
     protected AbstractUnsupportedOperationPreparedStatement(final ShardingConnection shardingConnection, final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) {
         super(shardingConnection, resultSetType, resultSetConcurrency, resultSetHoldability);
     }

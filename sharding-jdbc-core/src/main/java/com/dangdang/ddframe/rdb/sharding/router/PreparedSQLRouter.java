@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-/* 预解析功能的SQL路由器 */
+/* 预解析功能的SQL路由器, sql就解析一次 */
 @RequiredArgsConstructor
 public class PreparedSQLRouter {
     private final String logicSql;          /* 逻辑sql */
